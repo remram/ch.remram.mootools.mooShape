@@ -10,8 +10,13 @@ var mooShape = new Class({
 	options: {
 		verbose: false,
 		type: 'circle',
-		id: false,
-		properties : {
+		div: {
+			id: false,
+			style: 'mooshpe-div'
+		},
+		shape : {
+			id: 'mooshape-canvas',
+			style: 'mooshape-canvas',
 			width: 20,
 			height: 20,
 			color: '#f00',
@@ -32,19 +37,19 @@ var mooShape = new Class({
     
     prepareOptions: function() {
     	var opacity = 1;
-    	if(this.options.properties.opacity) {
-    		opacity = this.options.properties.opacity;
+    	if(this.options.shape.opacity) {
+    		opacity = this.options.shape.opacity;
     	}
     	
-    	if(this.options.properties.rgb) {
-    		this.options.properties.rgb = 'rgba(' + this.options.properties.rgb + ',' + opacity + ')';
+    	if(this.options.shape.rgb) {
+    		this.options.shape.rgb = 'rgba(' + this.options.shape.rgb + ',' + opacity + ')';
     	} else {
-    		this.options.properties.rgb = 'rgba(' + this.options.properties.color.hexToRgb(true) + ',' + opacity + ')';
+    		this.options.shape.rgb = 'rgba(' + this.options.shape.color.hexToRgb(true) + ',' + opacity + ')';
     	}
     	
     	//reset variable
-    	this.options.properties.color   = false;
-    	this.options.properties.opacity =  false;
+    	this.options.shape.color   = false;
+    	this.options.shape.opacity =  false;
     },
     
     /**
@@ -124,7 +129,11 @@ var mooShape = new Class({
     },
     
     getArgumentsArr: function() {
-    	var propertyValues = new Hash(this.options.properties);
+    	var propertyValues = new Hash(this.options.shape);
+    	//erase the id and style key
+    	propertyValues.erase('id');
+    	propertyValues.erase('style');
+    	
 		var argArray = new Array();
 		var i = 0;
 		propertyValues.each(function(value, key){
@@ -139,20 +148,22 @@ var mooShape = new Class({
     createShapeElements: function() {
     	var div = this.element;
     	var borderWeight = 0;
-    	if(!this.options.properties.borderWeight) 
+    	if(!this.options.shape.borderWeight) 
     		borderWeight = 2;
-    	if(this.options.id) {
+    	if(this.options.div.id) {
     		var div = new Element('div', {
-    			'id':     this.options.id,
-    			'width':  (this.options.properties.width + borderWeight),
-    			'height': (this.options.properties.height + borderWeight)
+    			'id'     : this.options.div.id,
+    			'width'  : (this.options.shape.width + borderWeight),
+    			'height' : (this.options.shape.height + borderWeight),
+    			'class'  : this.options.div.style
         	}).inject(this.element);
     	}
     	
     	var canvas = new Element('canvas', {
-			'id':     div.getProperty('id') + '-canvas',
-			'width':  this.options.properties.width,
-			'height': this.options.properties.height
+			'id':     this.options.shape.id,
+			'width':  this.options.shape.width,
+			'height': this.options.shape.height,
+			'class': this.options.shape.style
     	}).inject(div);
     	
     	if (Browser.Engine.trident && this.exCanvas == 'excanvas'){

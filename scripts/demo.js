@@ -2,8 +2,13 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		id: 'rectangle_1',
-		properties : {
+		div: {
+			id: 'rectangle_1',
+			style: 'my-div-style-1'
+		},		
+		shape: {
+			id: 'rect1',
+			style: 'my-shape-style-1',
 			width: 20,
 			height: 80,
 			color: '#036'
@@ -13,8 +18,8 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		id: 'rectangle_2',
-		properties : {
+		shape: {
+			id: 'rect2',
 			width: 50,
 			height: 50,
 			rgb: [255,100,60]
@@ -24,7 +29,10 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		properties : {
+		div: {
+			id: 'rectangle_3'
+		},		
+		shape: {
 			width: 20,
 			height: 20,
 			color: '#767'
@@ -34,7 +42,7 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		type: 'rectangle',
 		id: 'rectangle_4',
-		properties : {
+		shape: {
 			width: 500,
 			height: 20,
 			color: '#987',
@@ -45,8 +53,11 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		id: 'rectangle_5',
-		properties : {
+		div: {
+			id: 'rectangle_5',
+			style: 'my-div-style-2'
+		},		
+		shape: {
 			width: 30,
 			height: 20
 		}

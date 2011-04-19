@@ -11,7 +11,7 @@ var mooShapeRectangle = new Class({
     			[
     			 	function(width,height){
     			 		var x = 0, y = 0;
-    			 		this.ctx.fillStyle = this.options.properties.rgb;
+    			 		this.ctx.fillStyle = this.options.shape.rgb;
     					this.ctx.beginPath();
     					this.ctx.moveTo(x, y);
     					this.ctx.lineTo(x, y + height);
