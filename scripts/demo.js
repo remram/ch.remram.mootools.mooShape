@@ -18,11 +18,18 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
+		opacity: .3,
+		div: {
+			id: 'rectangle_2'
+		},
 		shape: {
 			id: 'rect2',
-			width: 50,
+			width: 1000,
 			height: 50,
 			rgb: [255,100,60]
+		},
+		title: {
+			text: 'Shape 2'
 		}
 	});
 
@@ -31,22 +38,27 @@ window.addEvent('domready', function() {
 		type: 'rectangle',
 		div: {
 			id: 'rectangle_3'
-		},		
+		},
 		shape: {
-			width: 20,
-			height: 20,
+			width: 60,
+			height: 60,
 			color: '#767'
+		},
+		title: {
+			text: 'Shape 3'
 		}
 	});
 
 	new mooShape('mooShapeContainer', {
 		type: 'rectangle',
-		id: 'rectangle_4',
+		opacity: .5,
+		div: {
+			id: 'rectangle_4'
+		},
 		shape: {
 			width: 500,
 			height: 20,
-			color: '#987',
-			opacity: .5
+			color: '#987'
 		}
 	});
 
