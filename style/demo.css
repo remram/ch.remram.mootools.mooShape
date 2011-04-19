@@ -1,0 +1,11 @@
+body {
+	font-family: "Warnock Pro","Goudy Old Style","Palatino","Book Antiqua",Georgia,serif;
+	color: #888;
+	font-style: italic;
+	background-image: url("./ubuntu.png");
+	background-repeat: no-repeat;
+}
+
+hr {
+	border: 1px solid #666;
+}

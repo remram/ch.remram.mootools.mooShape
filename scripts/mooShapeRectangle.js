@@ -9,17 +9,20 @@ var mooShapeRectangle = new Class({
     			this,
     			'draw',
     			[
-    			 	function(a){
-    			 		
-    			 	},
-    			 	
-    			 	function(a,b){
-    			 		
+    			 	function(width,height){
+    			 		var x = 0, y = 0;
+    			 		this.ctx.fillStyle = this.options.properties.rgb;
+    					this.ctx.beginPath();
+    					this.ctx.moveTo(x, y);
+    					this.ctx.lineTo(x, y + height);
+    					this.ctx.lineTo(x + width, y + height);
+    					this.ctx.lineTo(x + width, y);
+    					this.ctx.lineTo(x, y);
+    					this.ctx.fill();    			 		
     			 	},
     			 	
     			 	function(width,height,rgb){
     			 		var x = 0, y = 0;
-    			 		console.log(rgb);
     			 		this.ctx.fillStyle = rgb;
     					this.ctx.beginPath();
     					this.ctx.moveTo(x, y);
@@ -32,7 +35,6 @@ var mooShapeRectangle = new Class({
     			 	
     			 	function(width,height,rgb,d){
     			 		var x = 0, y = 0;
-    			 		console.log(rgb);
     			 		this.ctx.fillStyle = rgb;
     					this.ctx.beginPath();
     					this.ctx.moveTo(x, y);

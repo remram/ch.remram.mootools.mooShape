@@ -17,7 +17,7 @@ window.addEvent('domready', function() {
 		properties : {
 			width: 50,
 			height: 50,
-			color: '#f00'
+			rgb: [255,100,60]
 		}
 	});
 
@@ -37,7 +37,8 @@ window.addEvent('domready', function() {
 		properties : {
 			width: 500,
 			height: 20,
-			color: '#987'
+			color: '#987',
+			opacity: .5
 		}
 	});
 
@@ -46,9 +47,8 @@ window.addEvent('domready', function() {
 		type: 'rectangle',
 		id: 'rectangle_5',
 		properties : {
-			width: 20,
-			height: 20,
-			color: '#444'
+			width: 30,
+			height: 20
 		}
 	});
 });

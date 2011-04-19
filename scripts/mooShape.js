@@ -16,9 +16,9 @@ var mooShape = new Class({
 			height: 20,
 			color: '#f00',
 			rgb: false,
+			opacity: false,
 			borderColor: false,
-			borderWeight: false,
-			opacity: false
+			borderWeight: false
 		}
 	},
 
@@ -35,12 +35,16 @@ var mooShape = new Class({
     	if(this.options.properties.opacity) {
     		opacity = this.options.properties.opacity;
     	}
+    	
     	if(this.options.properties.rgb) {
     		this.options.properties.rgb = 'rgba(' + this.options.properties.rgb + ',' + opacity + ')';
     	} else {
     		this.options.properties.rgb = 'rgba(' + this.options.properties.color.hexToRgb(true) + ',' + opacity + ')';
     	}
-    	this.options.properties.color = false;
+    	
+    	//reset variable
+    	this.options.properties.color   = false;
+    	this.options.properties.opacity =  false;
     },
     
     /**
