@@ -20,6 +20,7 @@ var mooShape = new Class({
 	className : 'mooShape',
 	exCanvas  : 'excanvas',
 	type      : 'title',
+	titleSize : false,
 
 	Implements: Options,
 	
@@ -49,9 +50,8 @@ var mooShape = new Class({
 		title: {
 			id: 'mooshape-title',
 			style: 'mooshape-title',
+			rotate: '0',
 			text: false,
-			width: 100,
-			height: 100,
 			color: false,
 			rgb: [255,0,0],
 			align: 'center',
@@ -79,12 +79,16 @@ var mooShape = new Class({
     		this.options.shape.rgb = 'rgba(' + this.options.shape.color.hexToRgb(true) + ',' + opacity + ')';
     	} else {
     		this.options.shape.rgb = 'rgba(' + this.options.shape.rgb + ',' + opacity + ')';
-    	}    	
+    	}
     	
-    	if(this.options.title.color) {
-    		this.options.title.rgb = 'rgba(' + this.options.title.color.hexToRgb(true) + ',' + opacity + ')';
-    	} else {
-    		this.options.title.rgb = 'rgba(' + this.options.title.rgb + ',' + opacity + ')';
+    	if(this.options.title.text) {
+    		if(this.options.title.color) {
+        		this.options.title.rgb = 'rgba(' + this.options.title.color.hexToRgb(true) + ',' + opacity + ')';
+        	} else {
+        		this.options.title.rgb = 'rgba(' + this.options.title.rgb + ',' + opacity + ')';
+        	}
+    		
+    		this.titleSize = this.options.title.size.toInt()*4;
     	}
     	
     	
@@ -118,6 +122,7 @@ var mooShape = new Class({
 		try {
 			var shape = new window[this.className]();
 			shape.draw.apply(this, this.getOptionsArr(this.options.title));
+			shape.rotate(this.options.title.rotate,this.ctx.title, this.titleSize);			
     	} catch (oErr) {
     		if(this.options.verbose) 
     			console.log('Error: Class ( ' + 
@@ -237,8 +242,8 @@ var mooShape = new Class({
 		this.options.div.width  += (this.options.shape.width  + borderWeight);
 		this.options.div.height += (this.options.shape.height + borderWeight);
     	if(this.options.title.text) {
-    		this.options.div.width  += this.options.title.width  * 2;
-    		this.options.div.height += this.options.title.height * 2;
+    		this.options.div.width  += this.titleSize  * 2;
+    		this.options.div.height += this.titleSize * 2;
     		
     		left = (this.options.div.width  / 2) - ( (this.options.shape.width  + borderWeight) / 2);
     		top  = (this.options.div.height / 2) - ( (this.options.shape.height + borderWeight) / 2);
@@ -259,14 +264,14 @@ var mooShape = new Class({
     	if(this.options.title.text) {
     		var canvTitle = new Element('canvas', {
     			'id'     : this.options.title.id,
-    			'width'  : this.options.title.width,
-    			'height' : this.options.title.height,
+    			'width'  : this.titleSize,
+    			'height' : this.titleSize,
     			'class'  : this.options.title.style 
         	}).inject(div).setStyles({
         		position : 'absolute',
         		border   : '1px solid blue',
-        		width    : this.options.title.width,
-        	    height   : this.options.title.height,
+        		width    : this.titleSize,
+        	    height   : this.titleSize,
         	    top      : 0,
         	    right    : 0
         	});

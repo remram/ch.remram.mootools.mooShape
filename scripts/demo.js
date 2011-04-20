@@ -30,10 +30,9 @@ window.addEvent('domready', function() {
 		},
 		title: {
 			text: 'Shape 2',
-			size: 100,
+			size: 20,
 			color: '#cfcfcf',
-			width: 400,
-			height: 200
+			rotate: '45'
 		}
 	});
 
