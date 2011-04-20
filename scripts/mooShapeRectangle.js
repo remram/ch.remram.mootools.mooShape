@@ -9,7 +9,7 @@ var mooShapeRectangle = new Class({
     			'draw',
     			[
     			 	function(width,height){
-    			 		var x = 0, y = 0;
+    			 		var x = y = 0;
     			 		this.ctx.shape.fillStyle = this.options.shape.rgb;
     					this.ctx.shape.beginPath();
     					this.ctx.shape.moveTo(x, y);
@@ -22,20 +22,20 @@ var mooShapeRectangle = new Class({
     			 	},
     			 	
     			 	function(width,height,rgb){
-    			 		var x = 0, y = 0;
-    			 		this.ctx.shape.fillStyle = rgb;
+    			 		var x = y = 0;
+    			 		this.ctx.shape.fillStyle = this.options.shape.rgb;
     					this.ctx.shape.beginPath();
     					this.ctx.shape.moveTo(x, y);
-    					this.ctx.shape.lineTo(x, y + height);
-    					this.ctx.shape.lineTo(x + width, y + height);
-    					this.ctx.shape.lineTo(x + width, y);
+    					this.ctx.shape.lineTo(x, y + this.options.shape.height);
+    					this.ctx.shape.lineTo(x + this.options.shape.width, y + this.options.shape.height);
+    					this.ctx.shape.lineTo(x + this.options.shape.width, y);
     					this.ctx.shape.lineTo(x, y);
     					this.ctx.shape.fill();
     					return true;
-    			 	},
+    			 	}/*,
     			 	
     			 	function(width,height,rgb,d){
-    			 		var x = 0, y = 0;
+    			 		var x = y = 0;
     			 		this.ctx.shape.fillStyle = rgb;
     					this.ctx.shape.beginPath();
     					this.ctx.shape.moveTo(x, y);
@@ -45,7 +45,7 @@ var mooShapeRectangle = new Class({
     					this.ctx.shape.lineTo(x, y);
     					this.ctx.shape.fill();
     					return true;
-    			 	},
+    			 	}*/,
     			 	
     			 	function(a,b,c,d,e){
     			 		

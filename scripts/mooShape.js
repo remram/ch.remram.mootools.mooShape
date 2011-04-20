@@ -14,11 +14,12 @@
  */
 
 var mooShape = new Class({
-	version: '1.0',
-	jsPath:  './scripts/',	
-	files: new Hash(),
-	className: 'mooShape',
-	exCanvas: 'excanvas',
+	version   : '1.0',
+	jsPath    : './scripts/',	
+	files     : new Hash(),
+	className : 'mooShape',
+	exCanvas  : 'excanvas',
+	type      : 'title',
 
 	Implements: Options,
 	
@@ -39,8 +40,8 @@ var mooShape = new Class({
 			style: 'mooshape-canvas',
 			width: 20,
 			height: 20,
-			color: '#f00',
-			rgb: false,
+			color: false,
+			rgb: [255,0,0],
 			borderColor: false,
 			borderRGB: false,
 			borderWeight: false
@@ -51,10 +52,12 @@ var mooShape = new Class({
 			text: false,
 			width: 100,
 			height: 100,
-			color: '#000',
-			align: 'right',
+			color: false,
+			rgb: [255,0,0],
+			align: 'center',
+			baseline: 'middle',
 			font: 'serif',
-			size: '10pt'
+			size: 10
 		}
 	},
 
@@ -62,7 +65,8 @@ var mooShape = new Class({
     	this.element = $(el); if (!this.element) return;
     	this.setOptions(options);
     	this.prepareOptions();
-    	this.ctx = this.createShapeElements();
+    	this.createShapeElements();
+    	this.assetJsFile();
     },
     
     prepareOptions: function() {
@@ -71,16 +75,58 @@ var mooShape = new Class({
     		opacity = this.options.opacity;
     	}
     	
-    	if(this.options.shape.rgb) {
-    		this.options.shape.rgb = 'rgba(' + this.options.shape.rgb + ',' + opacity + ')';
-    	} else {
+    	if(this.options.shape.color) {
     		this.options.shape.rgb = 'rgba(' + this.options.shape.color.hexToRgb(true) + ',' + opacity + ')';
+    	} else {
+    		this.options.shape.rgb = 'rgba(' + this.options.shape.rgb + ',' + opacity + ')';
+    	}    	
+    	
+    	if(this.options.title.color) {
+    		this.options.title.rgb = 'rgba(' + this.options.title.color.hexToRgb(true) + ',' + opacity + ')';
+    	} else {
+    		this.options.title.rgb = 'rgba(' + this.options.title.rgb + ',' + opacity + ')';
     	}
+    	
     	
     	//reset variable
     	this.options.shape.color   = false;
-    	//this.options.shape.opacity =  false;
+    	this.options.title.color   = false;
     },
+	
+	assetSystemJsFiles: function() {
+		this.className = 'mooShape' + this.ucFirst(this.type);
+		var source = this.jsPath + this.className + '.js';
+		
+		if (this.files[source] == 'loaded'){
+			this.initSystemClass.delay(100, this);
+			return true;
+		}
+		
+		// If the class wasn't loaded, we try to load by the Asset method
+		this.files[source] = 'loaded';
+		Asset.javascript(source, {
+			onload: function(){
+				this.initSystemClass();
+		    }.bind(this)
+		});
+		
+		return true;
+	},
+	
+	initSystemClass: function() {
+		this.className = 'mooShape' + this.ucFirst(this.type);
+		try {
+			var shape = new window[this.className]();
+			shape.draw.apply(this, this.getOptionsArr(this.options.title));
+    	} catch (oErr) {
+    		if(this.options.verbose) 
+    			console.log('Error: Class ( ' + 
+    					this.type + 
+    					' @ ' + this.className + 
+    					'.js ) not found!'); 
+    	}
+    	return true;
+	},
     
     /**
      * try to asset javascript file dyanmically 
@@ -91,22 +137,15 @@ var mooShape = new Class({
     	 * For example: this.options.type = circle
     	 * It changes to "Circle"
     	 * As result: this.className = "mooShapeCircle"
-    	 */
-    	/*if(this.options.title.text) {
-    		this.className = 'mooShapeTitle';
-    	} else {
-    		this.className = 'mooShape' + this.ucFirst(this.options.type);
-    	}*/
-    	
+    	 */    	
     	this.className = 'mooShape' + this.ucFirst(this.options.type);
-    	console.log('assetJsFile: ' + this.className);
     	/**
     	 * Contains the source path of the shape class
     	 * As example: source = "./scripts/mooShapeCircle.js"
     	 */
     	var source = this.jsPath + this.className + '.js';
     			
-    	// If the class already loaded try to init the class
+    	// If the class already loaded try to init the class    	
 		if (this.files[source] == 'loaded'){
 			this.initClass.delay(100, this);
 			return true;
@@ -124,10 +163,10 @@ var mooShape = new Class({
 	},
 	
 	initClass: function() {
-		console.log('initClass: ' + this.className);
+		this.className = 'mooShape' + this.ucFirst(this.options.type);
 		try {
 			var shape = new window[this.className](this.element, this.options);
-			shape.draw.apply(this, this.getShapeArr());        	
+			shape.draw.apply(this, this.getOptionsArr(this.options.shape));        	
     	} catch (oErr) {
     		if(this.options.verbose) 
     			console.log('Error: Class ( ' + 
@@ -168,12 +207,12 @@ var mooShape = new Class({
         obj[name] = this.createOverload(args);
     },
     
-    getShapeArr: function() {
-    	var propertyValues = new Hash(this.options.shape);
+    getOptionsArr: function(options) {
+    	var propertyValues = new Hash(options);
     	//erase the id and style key
     	propertyValues.erase('id');
     	propertyValues.erase('style');
-    	
+
 		var argArray = new Array();
 		var i = 0;
 		propertyValues.each(function(value, key){
@@ -186,13 +225,15 @@ var mooShape = new Class({
     },
     
     createShapeElements: function() {
-    	var div = this.element;
+    	var canvas       = new Hash();
+    	var div          = this.element;
     	var borderWeight = 0;
-    	if(!this.options.shape.borderWeight) 
-    		borderWeight = 2;
+    	
+    	/*if(!this.options.shape.borderWeight) 
+    		borderWeight = 2;*/
 
-    	var top  = 0;
     	var left = 0;
+    	var top  = 0;
 		this.options.div.width  += (this.options.shape.width  + borderWeight);
 		this.options.div.height += (this.options.shape.height + borderWeight);
     	if(this.options.title.text) {
@@ -208,30 +249,33 @@ var mooShape = new Class({
     			'id'     : this.options.div.id,
     			'class'  : this.options.div.style
         	}).inject(this.element).setStyles({
-        		position: 'relative',
-        		border: '1px solid red',
-        		width: this.options.div.width,
-        	    height: this.options.div.height
+        		position : 'relative',
+        		border   : '1px solid red',
+        		width    : this.options.div.width,
+        	    height   : this.options.div.height
         	});
     	}
     	
-    	var canvas = new Hash();
-    	var type   = this.options.type;
     	if(this.options.title.text) {
     		var canvTitle = new Element('canvas', {
     			'id'     : this.options.title.id,
     			'width'  : this.options.title.width,
     			'height' : this.options.title.height,
     			'class'  : this.options.title.style 
-        	}).inject(div);
+        	}).inject(div).setStyles({
+        		position : 'absolute',
+        		border   : '1px solid blue',
+        		width    : this.options.title.width,
+        	    height   : this.options.title.height,
+        	    top      : 0,
+        	    right    : 0
+        	});
     		
     		if (Browser.Engine.trident && this.exCanvas == 'excanvas'){
         		G_vmlCanvasManager.initElement(canvTitle);
         	}
     		
     		canvas.extend({'title': canvTitle.getContext('2d')});
-    		this.setType('title');
-    		this.assetJsFile();
     	}
     	
     	var canvShape = new Element('canvas', {
@@ -240,9 +284,9 @@ var mooShape = new Class({
 			'height' : this.options.shape.height,
 			'class'  : this.options.shape.style
     	}).inject(div).setStyles({
-    		position: 'absolute',
-    	    top: top,
-    	    left: left
+    		position : 'absolute',
+    	    top      : top,
+    	    left     : left
     	});
     	
     	if (Browser.Engine.trident && this.exCanvas == 'excanvas'){
@@ -250,10 +294,12 @@ var mooShape = new Class({
     	}
     	
     	canvas.extend({'shape': canvShape.getContext('2d')});
-    	this.setType(type);
-    	this.assetJsFile();
     	
-    	return canvas;
+    	this.ctx = canvas;
+    	
+    	if(this.options.title.text) {
+    		this.assetSystemJsFiles();
+    	}
     },
     
     ucFirst: function(str) {
@@ -274,6 +320,11 @@ var mooShape = new Class({
     },
     
     setType: function(type) {
+    	this.type = type;
+    	return true;
+    },
+    
+    setClassType: function(type) {
     	this.options.type = type;
     	return true;
     }

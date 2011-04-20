@@ -29,7 +29,11 @@ window.addEvent('domready', function() {
 			rgb: [255,100,60]
 		},
 		title: {
-			text: 'Shape 2'
+			text: 'Shape 2',
+			size: 100,
+			color: '#cfcfcf',
+			width: 400,
+			height: 200
 		}
 	});
 
@@ -72,6 +76,18 @@ window.addEvent('domready', function() {
 		shape: {
 			width: 30,
 			height: 20
+		}
+	});
+
+	new mooShape('mooShapeContainer', {
+		verbose: true,
+		type: 'rectangle',
+		opacity: .3,
+		div: {
+			id: 'rectangle_x'
+		},
+		title: {
+			text: 'Shape X'
 		}
 	});
 });
