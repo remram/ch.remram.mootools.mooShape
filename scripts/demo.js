@@ -18,9 +18,11 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		opacity: .3,
+		opacity: .4,
 		div: {
-			id: 'rectangle_2'
+			id: 'rectangle_2',
+			x : 200,
+			y : 400
 		},
 		shape: {
 			id: 'rect2',
@@ -30,9 +32,10 @@ window.addEvent('domready', function() {
 		},
 		title: {
 			text: 'Shape 2',
-			size: 20,
+			size: 50,
 			color: '#cfcfcf',
-			rotate: '45'
+			rotate: '45',
+			align: 'bottom-right'
 		}
 	});
 
@@ -40,7 +43,9 @@ window.addEvent('domready', function() {
 		verbose: true,
 		type: 'rectangle',
 		div: {
-			id: 'rectangle_3'
+			id: 'rectangle_3',
+			x : 200,
+			y : -50
 		},
 		shape: {
 			width: 60,
@@ -49,7 +54,8 @@ window.addEvent('domready', function() {
 		},
 		title: {
 			text: 'Shape 3',
-			rotate: '315'
+			rotate: '315',
+			align: 'top-right'
 		}
 	});
 
@@ -83,13 +89,20 @@ window.addEvent('domready', function() {
 		verbose: true,
 		type: 'rectangle',
 		div: {
-			id: 'rectangle_x'
+			id: 'rectangle_x',
+			x : 300
+		},
+		shape: {
+			width: 10,
+			height: 60,
+			color: '#391'
 		},
 		title: {
 			text: 'Shape X',
 			color: [0,0,0],
 			size: 8,
-			rotate: '223'
+			rotate: '90',
+			align: 'left'
 		}
 	});
 });

@@ -18,18 +18,13 @@ var mooShapeTitle = new Class({
     			 		return true;
     			 	},
     			 	
-    			 	function(x,y,rgb,z){
-    			 		console.log('func3');
-    			 		return true;
-    			 	},
-    			 	
-    			 	function(a,b,c,d,e,f,g){
+    			 	function(a,b,c,d,e,f){
     			 		this.ctx.title.font         = this.options.title.size 
     			 										+ 'px ' 
     			 										+ this.options.title.font;
     			 		this.ctx.title.fillStyle    = this.options.title.rgb;
-    			 		this.ctx.title.textBaseline = 'middle'/*this.options.title.baseline*/;
-    			 		this.ctx.title.textAlign    = 'center'/*this.options.title.align*/; 
+    			 		this.ctx.title.textBaseline = 'middle';
+    			 		this.ctx.title.textAlign    = 'center'; 
     			 		
     			 		return true;
     			 	}
@@ -40,6 +35,103 @@ var mooShapeTitle = new Class({
     plot: function(text, ctx, size) {
     	ctx.fillText(text, (size/2), (size/2) );
     	return true;
+    },
+    
+    alignment: function(title, property, verbose) {
+    	console.log(title.align, property.pos.x);
+    	var x    = property.pos.x;
+    	var y    = property.pos.y;
+    	
+    	/*
+    	 * this.titleProperty = new Hash({
+    				'pos': {
+    					'x': (shapeWidth / 2) - (this.titleSize / 2),
+        				'y': -this.titleSize
+    				},
+    				'size': this.titleSize,
+    				'shape': {
+    					'width': shapeWidth,
+    					'height': shapeHeight
+    				}
+    		});*/
+    	
+    	switch (title.align) {
+	  	  case "top":
+	  		  if(verbose) console.log('Align title: ' + title.align);
+	  	    break;
+	  	  case "right":
+	  		  x = property.shape.width;
+	  		  y = (property.shape.height / 2) - (property.size / 2);
+	  		  property.element.setStyles({
+	  			  'top'  : y,
+	  			  'left' : x	  			  
+	  		  });
+	  		  if(verbose) console.log('Align title: ' + title.align);
+	  	    break;
+	  	  case "bottom":
+	  		  x = (property.shape.width / 2) - (property.size / 2);
+	  		  y = property.shape.height;
+	  		  property.element.setStyles({
+	  			  'top'  : y,
+	  			  'left' : x	  			  
+	  		  });
+	  		  if(verbose) console.log('Align title: ' + title.align);
+	  	    break;
+	  	  case "left":
+	  		  x = -property.size;
+	  		  y = (property.shape.height / 2) - (property.size / 2);
+	  		  property.element.setStyles({
+	  			  'top'  : y,
+	  			  'left' : x	  			  
+	  		  });
+	  		  if(verbose) console.log('Align title: ' + title.align);
+	  	    break;
+	  	  case "top-left":
+	  		  x = -property.size;
+	  		  y = -property.size;
+	  		  property.element.setStyles({
+	  			  'top'  : y,
+	  			  'left' : x	  			  
+	  		  });
+	  		  if(verbose) console.log('Align title: ' + title.align);
+	  	    break;
+	  	  case "top-right":
+	  		  x = property.shape.width;
+	  		  y = -property.size;
+	  		  property.element.setStyles({
+	  			  'top'  : y,
+	  			  'left' : x	  			  
+	  		  });
+	  		  if(verbose) console.log('Align title: ' + title.align);
+	  	    break;
+	  	  case "bottom-left":
+	  		  x = -property.size;
+	  		  y = property.shape.height;
+	  		  property.element.setStyles({
+	  			  'top'  : y,
+	  			  'left' : x	  			  
+	  		  });
+	  		  if(verbose) console.log('Align title: ' + title.align);
+	  	    break;
+	  	  case "bottom-right":
+	  		  x = property.shape.width;
+	  		  y = property.shape.height;
+	  		  property.element.setStyles({
+	  			  'top'  : y,
+	  			  'left' : x	  			  
+	  		  });
+	  		  if(verbose) console.log('Align title: ' + title.align);
+	  	    break;
+	  	  default:
+	  		  if(verbose) console.log('Title alignment error: ' + title.align + 
+	  				  ', allowed are [top (default), right, bottom, left, top-left, ' + 
+	  				  'top-right, bottom-left, bottom-right]');
+	  	    break;
+	  	}
+    	
+    	//console.log('Y: '+property.pos.get('y'));
+    	//console.log(title.align, property.pos.x, x, y);
+    	
     },
     
     rotate: function(deg, ctx, size, verbose) {
@@ -83,7 +175,8 @@ var mooShapeTitle = new Class({
     		  if(verbose) console.log('Rotate title: ' + deg + '°');
       	    break;
     	  default:
-    		  if(verbose) console.log('Title rotation error: ' + deg + '° , allowed are [0°(default), 45°, 90°, 135°, 180°, 225°, 270°, 315°]');
+    		  if(verbose) console.log('Title rotation error: ' + deg + '° , ' + 
+    				  'allowed are [0° (default), 45°, 90°, 135°, 180°, 225°, 270°, 315°]');
     	    break;
     	}
     }

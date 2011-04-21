@@ -13,6 +13,22 @@
  * @copyright	Solexperts AG
  */
 
+
+
+
+Element.implement({
+    removeStyle: function(ele) {
+        regex  = new RegExp('[~;\\s]' + ele + '.*?[;~]', "i");
+        search = '~' + this.get('style') + '~';
+        this.set('style', search.replace(regex, '').replace('~', ''));
+    },
+    
+    verboseStyle: function() {
+    	return console.log(this.getProperty('style'));
+    }
+});
+
+
 var mooShape = new Class({
 	version   : '1.0',
 	jsPath    : './scripts/',	
@@ -54,8 +70,7 @@ var mooShape = new Class({
 			text: false,
 			color: false,
 			rgb: [255,0,0],
-			align: 'center',
-			baseline: 'middle',
+			align: 'top',
 			font: 'serif',
 			size: 10
 		}
@@ -123,8 +138,8 @@ var mooShape = new Class({
 			var title = new window[this.className]();
 			title.init.apply(this, this.getOptionsArr(this.options.title));
 			title.rotate(this.options.title.rotate, this.ctx.title, this.titleSize, this.options.verbose);
+			title.alignment(this.options.title, this.titleProperty, this.options.verbose);
 			title.plot(this.options.title.text, this.ctx.title, this.titleSize);
-			
     	} catch (oErr) {
     		if(this.options.verbose) 
     			console.log('Error: Class ( ' + 
@@ -238,17 +253,19 @@ var mooShape = new Class({
     	
     	/*if(!this.options.shape.borderWeight) 
     		borderWeight = 2;*/
+    	
+    	
 
     	var left = 0;
     	var top  = 0;
-		this.options.div.width  += (this.options.shape.width  + borderWeight);
-		this.options.div.height += (this.options.shape.height + borderWeight);
-    	if(this.options.title.text) {
-    		this.options.div.width  += this.titleSize  * 2;
-    		this.options.div.height += this.titleSize * 2;
-    		
-    		left = (this.options.div.width  / 2) - ( (this.options.shape.width  + borderWeight) / 2);
-    		top  = (this.options.div.height / 2) - ( (this.options.shape.height + borderWeight) / 2);
+    	var shapeWidth  = this.options.shape.width  + borderWeight;
+    	var shapeHeight = this.options.shape.height + borderWeight;    	
+		this.options.div.width  += shapeWidth;
+		this.options.div.height += shapeHeight;
+		
+    	if(this.options.title.text) {    		
+    		left = (this.options.div.width  / 2) - (shapeWidth / 2);
+    		top  = (this.options.div.height / 2) - (shapeHeight / 2);
     	}
     	
     	if(this.options.div.id) {
@@ -259,11 +276,25 @@ var mooShape = new Class({
         		position : 'relative',
         		border   : '1px solid red',
         		width    : this.options.div.width,
-        	    height   : this.options.div.height
+        	    height   : this.options.div.height,
+        	    top      : this.options.div.y,
+        	    left     : this.options.div.x
         	});
     	}
     	
     	if(this.options.title.text) {
+    		this.titleProperty = new Hash({
+    				'pos': {
+    					'x': (shapeWidth / 2) - (this.titleSize / 2),
+        				'y': -this.titleSize
+    				},
+    				'size': this.titleSize,
+    				'shape': {
+    					'width': shapeWidth,
+    					'height': shapeHeight
+    				}
+    		});
+    		
     		var canvTitle = new Element('canvas', {
     			'id'     : this.options.title.id,
     			'width'  : this.titleSize,
@@ -274,9 +305,13 @@ var mooShape = new Class({
         		border   : '1px solid blue',
         		width    : this.titleSize,
         	    height   : this.titleSize,
-        	    top      : 0,
-        	    right    : 0
+        	    top      : this.titleProperty.pos.y,
+        	    left     : this.titleProperty.pos.x
         	});
+    		
+    		this.titleProperty.extend({
+    			'element': canvTitle
+    		});
     		
     		if (Browser.Engine.trident && this.exCanvas == 'excanvas'){
         		G_vmlCanvasManager.initElement(canvTitle);
