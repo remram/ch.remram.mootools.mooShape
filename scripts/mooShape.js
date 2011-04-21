@@ -120,9 +120,11 @@ var mooShape = new Class({
 	initSystemClass: function() {
 		this.className = 'mooShape' + this.ucFirst(this.type);
 		try {
-			var shape = new window[this.className]();
-			shape.draw.apply(this, this.getOptionsArr(this.options.title));
-			shape.rotate(this.options.title.rotate,this.ctx.title, this.titleSize);			
+			var title = new window[this.className]();
+			title.init.apply(this, this.getOptionsArr(this.options.title));
+			title.rotate(this.options.title.rotate, this.ctx.title, this.titleSize, this.options.verbose);
+			title.plot(this.options.title.text, this.ctx.title, this.titleSize);
+			
     	} catch (oErr) {
     		if(this.options.verbose) 
     			console.log('Error: Class ( ' + 

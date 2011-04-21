@@ -48,7 +48,8 @@ window.addEvent('domready', function() {
 			color: '#767'
 		},
 		title: {
-			text: 'Shape 3'
+			text: 'Shape 3',
+			rotate: '315'
 		}
 	});
 
@@ -81,12 +82,14 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		opacity: .3,
 		div: {
 			id: 'rectangle_x'
 		},
 		title: {
-			text: 'Shape X'
+			text: 'Shape X',
+			color: [0,0,0],
+			size: 8,
+			rotate: '223'
 		}
 	});
 });
