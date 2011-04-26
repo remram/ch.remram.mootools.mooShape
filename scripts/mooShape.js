@@ -89,6 +89,10 @@ var mooShape = new Class({
     		this.options.title.color = 'rgba(' + this.getColorAsRGB(this.options.title.color) + ',' + opacity + ')';
     		this.titleSize = this.options.title.size.toInt()*4 + (this.options.title.text.length * (this.options.title.size.toInt() * .3));
     	}
+    	
+    	if(this.options.shape.borderWeight == 0) {
+    		this.options.shape.borderColor = 'rgba(' + this.getColorAsRGB(this.options.shape.borderColor) + ',' + opacity + ')';
+    	}
     },
 	
 	assetSystemJsFiles: function() {
@@ -254,7 +258,7 @@ var mooShape = new Class({
     			'class'  : this.options.div.style
         	}).inject(this.element).setStyles({
         		position : 'relative',
-        		border   : '1px solid red',
+        		/*border   : '1px solid red',*/
         		width    : (this.options.div.width + shadow),
         	    height   : (this.options.div.height + shadow),
         	    top      : this.options.div.y,
@@ -282,7 +286,7 @@ var mooShape = new Class({
     			'class'  : this.options.title.style 
         	}).inject(div).setStyles({
         		position : 'absolute',
-        		border   : '1px solid blue',
+        		/*border   : '1px solid blue',*/
         		width    : this.titleSize,
         	    height   : this.titleSize,
         	    top      : this.titleProperty.pos.y,

@@ -11,7 +11,9 @@ window.addEvent('domready', function() {
 			style: 'my-shape-style-1',
 			width: 20,
 			height: 80,
-			color: '#036'
+			color: '#036',
+			borderWeight: 10,
+			borderColor: '#f00'
 		}
 	});
 
@@ -32,7 +34,9 @@ window.addEvent('domready', function() {
 			shadow: true,
 			shadowOffset: 20,
 			shadowBlur: 1,
-			shadowColor: '#ff0'
+			shadowColor: '#ff0',
+			borderWeight: 10,
+			borderColor: [0,0,0]
 		},
 		title: {
 			text: 'Shape 2',
@@ -117,7 +121,7 @@ window.addEvent('domready', function() {
 		div: {
 			id: 'rectangle_y',
 			x : 800,
-			y : -50
+			y : -100
 		},
 		shape: {
 			width: 10,

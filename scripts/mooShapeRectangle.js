@@ -32,7 +32,7 @@ var mooShapeRectangle = new Class({
     					this.ctx.shape.lineTo(x, y + this.options.shape.height);
     					this.ctx.shape.lineTo(x + this.options.shape.width, y + this.options.shape.height);
     					this.ctx.shape.lineTo(x + this.options.shape.width, y);
-    					this.ctx.shape.lineTo(x, y);
+    					this.ctx.shape.lineTo(x, y);   					
     					this.ctx.shape.fill();    					
     					
     					return true;
@@ -52,6 +52,25 @@ var mooShapeRectangle = new Class({
     					this.ctx.shape.lineTo(x + this.options.shape.width, y);
     					this.ctx.shape.lineTo(x, y);
     					
+    					this.ctx.shape.fill();
+    					
+    					return true;
+    			 	},
+    			 	
+    			 	/**
+    			 	 * draw with shadow and without border
+    			 	 */
+    			 	function(a,b,c,d,e,f,g,h){
+    			 		var x = y = 0;
+    					
+    			 		this.ctx.shape.fillStyle = this.options.shape.color;
+    					this.ctx.shape.beginPath();
+    					this.ctx.shape.moveTo(x, y);
+    					this.ctx.shape.lineTo(x, y + this.options.shape.height);
+    					this.ctx.shape.lineTo(x + this.options.shape.width, y + this.options.shape.height);
+    					this.ctx.shape.lineTo(x + this.options.shape.width, y);
+    					this.ctx.shape.lineTo(x, y);
+    					
     					//shadow
     					this.ctx.shape.shadowColor   = this.options.shape.shadowColor;
     					this.ctx.shape.shadowBlur    = this.options.shape.shadowBlur;
@@ -59,6 +78,60 @@ var mooShapeRectangle = new Class({
     					this.ctx.shape.shadowOffsetY = this.options.shape.shadowOffset;
     					
     					this.ctx.shape.fill();
+    					
+    					return true;
+    			 	},
+    			 	
+    			 	/**
+    			 	 * draw without shadow and with border
+    			 	 */
+    			 	/*function(a,b,c,d,e,f,g,h,i){
+    			 		var x = y = 0;
+    					
+    			 		this.ctx.shape.fillStyle = this.options.shape.color;
+    					this.ctx.shape.beginPath();
+    					this.ctx.shape.moveTo(x, y);
+    					this.ctx.shape.lineTo(x, y + this.options.shape.height);
+    					this.ctx.shape.lineTo(x + this.options.shape.width, y + this.options.shape.height);
+    					this.ctx.shape.lineTo(x + this.options.shape.width, y);
+    					this.ctx.shape.lineTo(x, y);
+    					
+    					//border
+    					this.ctx.shape.lineWidth     = this.options.shape.borderWeight;
+    					this.ctx.shape.strokeStyle   = this.options.shape.borderColor;
+    					
+    					this.ctx.shape.fill();
+    					this.ctx.shape.stroke();
+    					
+    					return true;
+    			 	},*/
+    			 	
+    			 	/**
+    			 	 * draw with border and shadow
+    			 	 */
+    			 	function(a,b,c,d,e,f,g,h,i){
+    			 		var x = y = 0;
+    					
+    			 		this.ctx.shape.fillStyle = this.options.shape.color;
+    					this.ctx.shape.beginPath();
+    					this.ctx.shape.moveTo(x, y);
+    					this.ctx.shape.lineTo(x, y + this.options.shape.height);
+    					this.ctx.shape.lineTo(x + this.options.shape.width, y + this.options.shape.height);
+    					this.ctx.shape.lineTo(x + this.options.shape.width, y);
+    					this.ctx.shape.lineTo(x, y);
+    					
+    					//border
+    					this.ctx.shape.lineWidth     = this.options.shape.borderWeight;
+    					this.ctx.shape.strokeStyle   = this.options.shape.borderColor;
+    					
+    					//shadow
+    					this.ctx.shape.shadowColor   = this.options.shape.shadowColor;
+    					this.ctx.shape.shadowBlur    = this.options.shape.shadowBlur;
+    					this.ctx.shape.shadowOffsetX = this.options.shape.shadowOffset;
+    					this.ctx.shape.shadowOffsetY = this.options.shape.shadowOffset;
+    					
+    					this.ctx.shape.fill();
+    					this.ctx.shape.stroke();
     					
     					return true;
     			 	}
