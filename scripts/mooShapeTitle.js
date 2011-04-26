@@ -6,23 +6,11 @@ var mooShapeTitle = new Class({
     			this,
     			'init',
     			[
-    			 	function(x,y){
-    			 		console.log('func1');
-    			 		return true;
-    			 	},
-    			 	
-    			 	function(x,y,rgb){
-    			 		console.log('func2: ' + this.options.title.text);
-    			 		var x = 0, y = 0;
-    			 		this.ctx.title.fillText(this.options.title.text, x, y);
-    			 		return true;
-    			 	},
-    			 	
     			 	function(a,b,c,d,e,f){
     			 		this.ctx.title.font         = this.options.title.size 
     			 										+ 'px ' 
     			 										+ this.options.title.font;
-    			 		this.ctx.title.fillStyle    = this.options.title.rgb;
+    			 		this.ctx.title.fillStyle    = this.options.title.color;
     			 		this.ctx.title.textBaseline = 'middle';
     			 		this.ctx.title.textAlign    = 'center'; 
     			 		
@@ -38,22 +26,8 @@ var mooShapeTitle = new Class({
     },
     
     alignment: function(title, property, verbose) {
-    	console.log(title.align, property.pos.x);
     	var x    = property.pos.x;
     	var y    = property.pos.y;
-    	
-    	/*
-    	 * this.titleProperty = new Hash({
-    				'pos': {
-    					'x': (shapeWidth / 2) - (this.titleSize / 2),
-        				'y': -this.titleSize
-    				},
-    				'size': this.titleSize,
-    				'shape': {
-    					'width': shapeWidth,
-    					'height': shapeHeight
-    				}
-    		});*/
     	
     	switch (title.align) {
 	  	  case "top":
@@ -127,11 +101,7 @@ var mooShapeTitle = new Class({
 	  				  ', allowed are [top (default), right, bottom, left, top-left, ' + 
 	  				  'top-right, bottom-left, bottom-right]');
 	  	    break;
-	  	}
-    	
-    	//console.log('Y: '+property.pos.get('y'));
-    	//console.log(title.align, property.pos.x, x, y);
-    	
+	  	}    	
     },
     
     rotate: function(deg, ctx, size, verbose) {

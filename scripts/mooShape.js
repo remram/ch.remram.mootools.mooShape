@@ -16,19 +16,6 @@
 
 
 
-Element.implement({
-    removeStyle: function(ele) {
-        regex  = new RegExp('[~;\\s]' + ele + '.*?[;~]', "i");
-        search = '~' + this.get('style') + '~';
-        this.set('style', search.replace(regex, '').replace('~', ''));
-    },
-    
-    verboseStyle: function() {
-    	return console.log(this.getProperty('style'));
-    }
-});
-
-
 var mooShape = new Class({
 	version   : '1.0',
 	jsPath    : './scripts/',	
@@ -45,7 +32,7 @@ var mooShape = new Class({
 		type: 'circle',
 		opacity: false,
 		div: {
-			id: false,
+			id: 'mooshpe-div',
 			style: 'mooshpe-div',
 			x: false,
 			y: false,
@@ -57,19 +44,20 @@ var mooShape = new Class({
 			style: 'mooshape-canvas',
 			width: 20,
 			height: 20,
-			color: false,
-			rgb: [255,0,0],
-			borderColor: false,
-			borderRGB: false,
-			borderWeight: false
+			color: [255,0,0],
+			shadow: false,
+			shadowOffset: 5,
+			shadowBlur: 5,
+			shadowColor: [187,187,187],
+			borderWeight: false,
+			borderColor: false
 		},
 		title: {
 			id: 'mooshape-title',
 			style: 'mooshape-title',
 			rotate: '0',
 			text: false,
-			color: false,
-			rgb: [255,0,0],
+			color: [255,0,0],
 			align: 'top',
 			font: 'serif',
 			size: 10
@@ -90,26 +78,17 @@ var mooShape = new Class({
     		opacity = this.options.opacity;
     	}
     	
-    	if(this.options.shape.color) {
-    		this.options.shape.rgb = 'rgba(' + this.options.shape.color.hexToRgb(true) + ',' + opacity + ')';
-    	} else {
-    		this.options.shape.rgb = 'rgba(' + this.options.shape.rgb + ',' + opacity + ')';
+    	if(this.options.shape.shadowBlur == 0) {
+    		this.options.shape.shadowBlur = 5;
     	}
+    	
+    	this.options.shape.color = 'rgba(' + this.getColorAsRGB(this.options.shape.color) + ',' + opacity + ')';
+    	this.options.shape.shadowColor = 'rgba(' + this.getColorAsRGB(this.options.shape.shadowColor) + ',' + opacity + ')';
     	
     	if(this.options.title.text) {
-    		if(this.options.title.color) {
-        		this.options.title.rgb = 'rgba(' + this.options.title.color.hexToRgb(true) + ',' + opacity + ')';
-        	} else {
-        		this.options.title.rgb = 'rgba(' + this.options.title.rgb + ',' + opacity + ')';
-        	}
-    		
-    		this.titleSize = this.options.title.size.toInt()*4;
+    		this.options.title.color = 'rgba(' + this.getColorAsRGB(this.options.title.color) + ',' + opacity + ')';
+    		this.titleSize = this.options.title.size.toInt()*4 + (this.options.title.text.length * (this.options.title.size.toInt() * .3));
     	}
-    	
-    	
-    	//reset variable
-    	this.options.shape.color   = false;
-    	this.options.title.color   = false;
     },
 	
 	assetSystemJsFiles: function() {
@@ -250,9 +229,10 @@ var mooShape = new Class({
     	var canvas       = new Hash();
     	var div          = this.element;
     	var borderWeight = 0;
+    	var shadow       = 0;
     	
-    	/*if(!this.options.shape.borderWeight) 
-    		borderWeight = 2;*/
+    	if(this.options.shape.shadow) 
+    		shadow = this.options.shape.shadowOffset + 3;
     	
     	
 
@@ -275,8 +255,8 @@ var mooShape = new Class({
         	}).inject(this.element).setStyles({
         		position : 'relative',
         		border   : '1px solid red',
-        		width    : this.options.div.width,
-        	    height   : this.options.div.height,
+        		width    : (this.options.div.width + shadow),
+        	    height   : (this.options.div.height + shadow),
         	    top      : this.options.div.y,
         	    left     : this.options.div.x
         	});
@@ -322,8 +302,8 @@ var mooShape = new Class({
     	
     	var canvShape = new Element('canvas', {
 			'id'     : this.options.shape.id,
-			'width'  : this.options.shape.width,
-			'height' : this.options.shape.height,
+			'width'  : (this.options.shape.width + shadow),
+			'height' : (this.options.shape.height + shadow),
 			'class'  : this.options.shape.style
     	}).inject(div).setStyles({
     		position : 'absolute',
@@ -344,9 +324,27 @@ var mooShape = new Class({
     	}
     },
     
+    /**
+     * Convert the first char to capital
+     * @param str
+     * @returns
+     */    
     ucFirst: function(str) {
-        var firstChar = str.charAt(0).toUpperCase();
-        return firstChar + str.substr(1);
+    	var word = str.toLowerCase();
+        var firstChar = word.charAt(0).toUpperCase();
+        return firstChar + word.substr(1);
+    },
+    
+    /**
+     * This function try to convert a hex color such as #f00 to rgb like [255,0,0]
+     * @param color
+     * @returns color as rgb(0-255,0-255,0-255)
+     */
+    getColorAsRGB: function(color) {
+    	if(/^(#){1}?[0-9a-fA-F]{3,6}/.test(color)) {
+    		return color.hexToRgb(true);
+    	}
+    	return color;
     },
     
     getVersion: function() {
