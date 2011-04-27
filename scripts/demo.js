@@ -2,6 +2,7 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
+		actions: [1,2],
 		div: {
 			id: 'rectangle_1',
 			style: 'my-div-style-1'
@@ -20,7 +21,8 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectaNGlE',
-		opacity: .4,
+		actions: [3,1,2],
+		opacity: 1,
 		div: {
 			id: 'rectangle_2',
 			x : 200,
@@ -34,9 +36,9 @@ window.addEvent('domready', function() {
 			shadow: true,
 			shadowOffset: 20,
 			shadowBlur: 1,
-			shadowColor: '#ff0',
+			shadowColor: '#360',
 			borderWeight: 10,
-			borderColor: [0,0,0]
+			borderColor: '#c6f829'
 		},
 		title: {
 			text: 'Shape 2',
@@ -50,6 +52,7 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
+		actions: [1,3],
 		div: {
 			id: 'rectangle_3',
 			x : 200,
@@ -59,7 +62,9 @@ window.addEvent('domready', function() {
 			width: 60,
 			height: 60,
 			color: '#767',
-			shadow: true
+			shadow: true/*,
+			borderWeight: 2,
+			borderColor: [0,0,0]*/
 		},
 		title: {
 			text: 'Shape 3',
@@ -97,6 +102,7 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
+		actions: [1],
 		div: {
 			id: 'rectangle_x',
 			x : 300
@@ -118,6 +124,7 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
+		actions: [1,3],
 		div: {
 			id: 'rectangle_y',
 			x : 800,

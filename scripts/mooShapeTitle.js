@@ -5,7 +5,7 @@ var mooShapeTitle = new Class({
     	this.methodOverload(
     			this,
     			'init',
-    			[
+    			[    			 	
     			 	function(a,b,c,d,e,f){
     			 		this.ctx.title.font         = this.options.title.size 
     			 										+ 'px ' 

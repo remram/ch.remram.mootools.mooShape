@@ -18,18 +18,18 @@
 
 var mooShape = new Class({
 	version   : '1.0',
-	jsPath    : './scripts/',	
-	files     : new Hash(),
+	jsPath    : './scripts/',
 	className : 'mooShape',
-	exCanvas  : 'excanvas',
 	type      : 'title',
 	titleSize : false,
+	methods: ['fill', 'stroke', 'shadow', 'replot'],
 
 	Implements: Options,
 	
 	options: {
 		verbose: false,
 		type: 'circle',
+		actions: [1],
 		opacity: false,
 		div: {
 			id: 'mooshpe-div',
@@ -49,8 +49,8 @@ var mooShape = new Class({
 			shadowOffset: 5,
 			shadowBlur: 5,
 			shadowColor: [187,187,187],
-			borderWeight: false,
-			borderColor: false
+			borderWeight: 1,
+			borderColor: [0,0,0]
 		},
 		title: {
 			id: 'mooshape-title',
@@ -65,11 +65,11 @@ var mooShape = new Class({
 	},
 
     initialize: function(el, options){
-    	this.element = $(el); if (!this.element) return;
-    	this.setOptions(options);
-    	this.prepareOptions();
+    	this.element = $(el); if (!this.element) return;    	
+    	this.setOptions(options);    	
+    	this.prepareOptions();    	
     	this.createShapeElements();
-    	this.assetJsFile();
+    	this.assetJsFile();    	
     },
     
     prepareOptions: function() {
@@ -90,7 +90,7 @@ var mooShape = new Class({
     		this.titleSize = this.options.title.size.toInt()*4 + (this.options.title.text.length * (this.options.title.size.toInt() * .3));
     	}
     	
-    	if(this.options.shape.borderWeight == 0) {
+    	if(this.options.shape.borderColor == false) {
     		this.options.shape.borderColor = 'rgba(' + this.getColorAsRGB(this.options.shape.borderColor) + ',' + opacity + ')';
     	}
     },
@@ -98,15 +98,15 @@ var mooShape = new Class({
 	assetSystemJsFiles: function() {
 		this.className = 'mooShape' + this.ucFirst(this.type);
 		var source = this.jsPath + this.className + '.js';
-		
-		if (this.files[source] == 'loaded'){
+
+		if($(this.className + '-jsfile')) {
 			this.initSystemClass.delay(100, this);
 			return true;
 		}
 		
 		// If the class wasn't loaded, we try to load by the Asset method
-		this.files[source] = 'loaded';
 		Asset.javascript(source, {
+			id: this.className + '-jsfile',
 			onload: function(){
 				this.initSystemClass();
 		    }.bind(this)
@@ -125,7 +125,7 @@ var mooShape = new Class({
 			title.plot(this.options.title.text, this.ctx.title, this.titleSize);
     	} catch (oErr) {
     		if(this.options.verbose) 
-    			console.log('Error: Class ( ' + 
+    			console.error('Error: Class ( ' + 
     					this.type + 
     					' @ ' + this.className + 
     					'.js ) not found!'); 
@@ -150,15 +150,15 @@ var mooShape = new Class({
     	 */
     	var source = this.jsPath + this.className + '.js';
     			
-    	// If the class already loaded try to init the class    	
-		if (this.files[source] == 'loaded'){
+    	// If the class already loaded try to init the class   
+		if($(this.className + '-jsfile')) {
 			this.initClass.delay(100, this);
 			return true;
 		}
 		
 		// If the class wasn't loaded, we try to load by the Asset method
-		this.files[source] = 'loaded';
 		Asset.javascript(source, {
+			id: this.className + '-jsfile',
 			onload: function(){
 				this.initClass();
 		    }.bind(this)
@@ -170,7 +170,60 @@ var mooShape = new Class({
 	initClass: function() {
 		this.className = 'mooShape' + this.ucFirst(this.options.type);
 		try {
-			var shape = new window[this.className](this.element, this.options);
+			var shape = new window[this.className]();
+			shape.draw.apply(this);
+			Array.each(this.options.actions, function(dig, key){
+				var methodKey = dig - 1;
+				var foundedMethod = false;
+	    		Array.each(this.methods, function(value, index){
+	    			if(index == methodKey) {
+	    				foundedMethod = true;
+	    				try {
+	    					shape[value].apply(this);
+	    				} catch (oErr) {
+	    		    		if(this.options.verbose) 
+	    		    			console.error('Error: Method ( ' + 
+	    		    					value + ' ) isn\'t implemented yet!'); 
+	    		    	}
+	    			}
+	    		}.bind(this));
+	    		
+	    		if(!foundedMethod) {
+	    			if(this.options.verbose) 
+		    			console.error('Error: You are calling unknown method!'); 
+	    		}
+	    		
+			}.bind(this));
+		} catch (oErr) {
+    		if(this.options.verbose) 
+    			console.error('Error: Class ( ' + 
+    					this.options.type + 
+    					' @ ' + this.className + 
+    					'.js ) not found!'); 
+    	}
+		//shape[checkMethodKey(key)]();
+		
+		
+		/*this.className = 'mooShape' + this.ucFirst(this.options.type);
+		try {
+			//var shape = new window[this.className]();
+			console.log(this.methods);
+			
+			//shape.draw.apply(this, this.getOptionsArr(this.options.shape));        	
+    	} catch (oErr) {
+    		if(this.options.verbose) 
+    			console.log('Error: Class ( ' + 
+    					this.options.type + 
+    					' @ ' + this.className + 
+    					'.js ) not found!'); 
+    	}
+    	return true;*/
+	}/*,
+	
+	initClass: function() {
+		this.className = 'mooShape' + this.ucFirst(this.options.type);
+		try {
+			var shape = new window[this.className]();
 			shape.draw.apply(this, this.getOptionsArr(this.options.shape));        	
     	} catch (oErr) {
     		if(this.options.verbose) 
@@ -180,7 +233,7 @@ var mooShape = new Class({
     					'.js ) not found!'); 
     	}
     	return true;
-	},
+	}*/,
 	
 	createOverload: function(arr) {
         return function() {
@@ -200,7 +253,7 @@ var mooShape = new Class({
 	
 	methodOverload: function(obj, name, fn) {
         var args = [];
-        switch ($type(fn)) {
+        switch (typeOf(fn)) {
 	        case 'function':
 	            args = [fn];
 	            break;
@@ -226,11 +279,16 @@ var mooShape = new Class({
 				i++;
 			}
 		});
+		
+		if(this.options.verbose) {
+			console.log(this.options.type + ' - Counted parameters = ' + argArray.length + ' => [' + argArray + ']');
+		}
+		
 		return argArray;
     },
     
     createShapeElements: function() {
-    	var canvas       = new Hash();
+    	var canvas       = {};
     	var div          = this.element;
     	var borderWeight = 0;
     	var shadow       = 0;
@@ -258,7 +316,6 @@ var mooShape = new Class({
     			'class'  : this.options.div.style
         	}).inject(this.element).setStyles({
         		position : 'relative',
-        		/*border   : '1px solid red',*/
         		width    : (this.options.div.width + shadow),
         	    height   : (this.options.div.height + shadow),
         	    top      : this.options.div.y,
@@ -286,7 +343,6 @@ var mooShape = new Class({
     			'class'  : this.options.title.style 
         	}).inject(div).setStyles({
         		position : 'absolute',
-        		/*border   : '1px solid blue',*/
         		width    : this.titleSize,
         	    height   : this.titleSize,
         	    top      : this.titleProperty.pos.y,
@@ -297,11 +353,10 @@ var mooShape = new Class({
     			'element': canvTitle
     		});
     		
-    		if (Browser.Engine.trident && this.exCanvas == 'excanvas'){
+    		if (Browser.ie){
         		G_vmlCanvasManager.initElement(canvTitle);
         	}
-    		
-    		canvas.extend({'title': canvTitle.getContext('2d')});
+    		Object.append(canvas, {'title': canvTitle.getContext('2d')});
     	}
     	
     	var canvShape = new Element('canvas', {
@@ -315,11 +370,11 @@ var mooShape = new Class({
     	    left     : left
     	});
     	
-    	if (Browser.Engine.trident && this.exCanvas == 'excanvas'){
+    	if (Browser.ie){
     		G_vmlCanvasManager.initElement(canvShape);
     	}
     	
-    	canvas.extend({'shape': canvShape.getContext('2d')});
+    	Object.append(canvas, {'shape': canvShape.getContext('2d')});
     	
     	this.ctx = canvas;
     	
@@ -342,7 +397,7 @@ var mooShape = new Class({
     /**
      * This function try to convert a hex color such as #f00 to rgb like [255,0,0]
      * @param color
-     * @returns color as rgb(0-255,0-255,0-255)
+     * @returns color as [0-255,0-255,0-255]
      */
     getColorAsRGB: function(color) {
     	if(/^(#){1}?[0-9a-fA-F]{3,6}/.test(color)) {
