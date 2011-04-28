@@ -1,14 +1,12 @@
-var mooShapeRectangle = new Class({
+var mooShapeCircle = new Class({
 	Extends: mooShape,
     
     draw: function() {
-    	var x = y = 0;
+    	var x = this.options.shape.width + (this.options.shape.width / 9);
+    	var y = this.options.shape.width + (this.options.shape.width / 9);
  		this.ctx.shape.fillStyle = this.options.shape.color;
 		this.ctx.shape.beginPath();
-		this.ctx.shape.moveTo(x, y);this.ctx.shape.lineTo(x, y + this.options.shape.height);
-		this.ctx.shape.lineTo(x + this.options.shape.width, y + this.options.shape.height);
-		this.ctx.shape.lineTo(x + this.options.shape.width, y);
-		this.ctx.shape.lineTo(x, y); 
+		this.ctx.shape.arc(x, y, this.options.shape.width, 0, Math.PI*2, true); 
 		this.ctx.shape.closePath();
     },
     

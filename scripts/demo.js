@@ -2,7 +2,7 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		actions: [1,2],
+		actions: ['stroke'],
 		div: {
 			id: 'rectangle_1',
 			style: 'my-div-style-1'
@@ -20,8 +20,8 @@ window.addEvent('domready', function() {
 
 	new mooShape('mooShapeContainer', {
 		verbose: true,
-		type: 'rectaNGlE',
-		actions: [3,1,2],
+		type: 'circle',
+		actions: ['fill','shadow'],
 		opacity: 1,
 		div: {
 			id: 'rectangle_2',
@@ -30,12 +30,11 @@ window.addEvent('domready', function() {
 		},
 		shape: {
 			id: 'rect2',
-			width: 1000,
-			height: 50,
+			width: 10,
+			height: 10,
 			color: [255,100,60],
-			shadow: true,
-			shadowOffset: 20,
-			shadowBlur: 1,
+			shadowOffset: 10,
+			shadowBlur: 50,
 			shadowColor: '#360',
 			borderWeight: 10,
 			borderColor: '#c6f829'
@@ -49,10 +48,10 @@ window.addEvent('domready', function() {
 		}
 	});
 
-	new mooShape('mooShapeContainer', {
+	var rec3 = new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		actions: [1,3],
+		actions: ['fill','shadow'],
 		div: {
 			id: 'rectangle_3',
 			x : 200,
@@ -61,8 +60,7 @@ window.addEvent('domready', function() {
 		shape: {
 			width: 60,
 			height: 60,
-			color: '#767',
-			shadow: true/*,
+			color: '#767'/*,
 			borderWeight: 2,
 			borderColor: [0,0,0]*/
 		},
@@ -72,18 +70,13 @@ window.addEvent('domready', function() {
 			align: 'top'
 		}
 	});
+	
+	//rec3.execMethod('stroke');
+	
 
 	new mooShape('mooShapeContainer', {
 		type: 'rectangle',
-		opacity: .5,
-		div: {
-			id: 'rectangle_4'
-		},
-		shape: {
-			width: 500,
-			height: 20,
-			color: '#987'
-		}
+		opacity: .3
 	});
 
 	new mooShape('mooShapeContainer', {
@@ -91,18 +84,24 @@ window.addEvent('domready', function() {
 		type: 'rectangle',
 		div: {
 			id: 'rectangle_5',
-			style: 'my-div-style-2'
+			style: 'my-div-style-2',
+			y: 10
 		},		
 		shape: {
 			width: 30,
 			height: 20
+		},
+		title: {
+			text: 'Shape 5',
+			rotate: '0',
+			align: 'right'
 		}
 	});
 
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		actions: [1],
+		actions: ['fill'],
 		div: {
 			id: 'rectangle_x',
 			x : 300
@@ -124,7 +123,7 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'rectangle',
-		actions: [1,3],
+		actions: ['shadow','fill'],
 		div: {
 			id: 'rectangle_y',
 			x : 800,
@@ -134,7 +133,6 @@ window.addEvent('domready', function() {
 			width: 10,
 			height: 10,
 			color: [0,0,255],
-			shadow: true,
 			shadowOffset: 2
 		},
 		title: {

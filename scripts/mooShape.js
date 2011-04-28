@@ -1,5 +1,5 @@
 /**
- * mooShape
+ * mooShape compatible with MooTools version 1.3
  *
  * You can create different shape types and you are able to extend the class
  * by other shape types
@@ -22,14 +22,14 @@ var mooShape = new Class({
 	className : 'mooShape',
 	type      : 'title',
 	titleSize : false,
-	methods: ['fill', 'stroke', 'shadow', 'replot'],
+	methods   : ['shadow', 'fill', 'stroke'],
 
 	Implements: Options,
 	
 	options: {
 		verbose: false,
 		type: 'circle',
-		actions: [1],
+		actions: ['fill'],
 		opacity: false,
 		div: {
 			id: 'mooshpe-div',
@@ -45,8 +45,7 @@ var mooShape = new Class({
 			width: 20,
 			height: 20,
 			color: [255,0,0],
-			shadow: false,
-			shadowOffset: 5,
+			shadowOffset: 1,
 			shadowBlur: 5,
 			shadowColor: [187,187,187],
 			borderWeight: 1,
@@ -67,7 +66,8 @@ var mooShape = new Class({
     initialize: function(el, options){
     	this.element = $(el); if (!this.element) return;    	
     	this.setOptions(options);    	
-    	this.prepareOptions();    	
+    	this.prepareOptions();
+    	this.reorderActions();
     	this.createShapeElements();
     	this.assetJsFile();    	
     },
@@ -119,7 +119,7 @@ var mooShape = new Class({
 		this.className = 'mooShape' + this.ucFirst(this.type);
 		try {
 			var title = new window[this.className]();
-			title.init.apply(this, this.getOptionsArr(this.options.title));
+			title.init.apply(this);
 			title.rotate(this.options.title.rotate, this.ctx.title, this.titleSize, this.options.verbose);
 			title.alignment(this.options.title, this.titleProperty, this.options.verbose);
 			title.plot(this.options.title.text, this.ctx.title, this.titleSize);
@@ -170,29 +170,16 @@ var mooShape = new Class({
 	initClass: function() {
 		this.className = 'mooShape' + this.ucFirst(this.options.type);
 		try {
-			var shape = new window[this.className]();
-			shape.draw.apply(this);
-			Array.each(this.options.actions, function(dig, key){
-				var methodKey = dig - 1;
-				var foundedMethod = false;
-	    		Array.each(this.methods, function(value, index){
-	    			if(index == methodKey) {
-	    				foundedMethod = true;
-	    				try {
-	    					shape[value].apply(this);
-	    				} catch (oErr) {
-	    		    		if(this.options.verbose) 
-	    		    			console.error('Error: Method ( ' + 
-	    		    					value + ' ) isn\'t implemented yet!'); 
-	    		    	}
-	    			}
-	    		}.bind(this));
-	    		
-	    		if(!foundedMethod) {
-	    			if(this.options.verbose) 
-		    			console.error('Error: You are calling unknown method!'); 
-	    		}
-	    		
+			this.shape = new window[this.className]();
+			this.shape.draw.apply(this);
+			Array.each(this.options.actions, function(value, index){
+				try {
+					this.shape[value].apply(this);
+				} catch (oErr) {
+		    		if(this.options.verbose) 
+		    			console.error('Error: Method ( ' + 
+		    					value + ' ) isn\'t implemented yet!'); 
+		    	}
 			}.bind(this));
 		} catch (oErr) {
     		if(this.options.verbose) 
@@ -201,113 +188,95 @@ var mooShape = new Class({
     					' @ ' + this.className + 
     					'.js ) not found!'); 
     	}
-		//shape[checkMethodKey(key)]();
-		
-		
-		/*this.className = 'mooShape' + this.ucFirst(this.options.type);
-		try {
-			//var shape = new window[this.className]();
-			console.log(this.methods);
-			
-			//shape.draw.apply(this, this.getOptionsArr(this.options.shape));        	
-    	} catch (oErr) {
-    		if(this.options.verbose) 
-    			console.log('Error: Class ( ' + 
-    					this.options.type + 
-    					' @ ' + this.className + 
-    					'.js ) not found!'); 
-    	}
-    	return true;*/
-	}/*,
+	},
 	
-	initClass: function() {
-		this.className = 'mooShape' + this.ucFirst(this.options.type);
-		try {
-			var shape = new window[this.className]();
-			shape.draw.apply(this, this.getOptionsArr(this.options.shape));        	
-    	} catch (oErr) {
-    		if(this.options.verbose) 
-    			console.log('Error: Class ( ' + 
-    					this.options.type + 
-    					' @ ' + this.className + 
-    					'.js ) not found!'); 
-    	}
-    	return true;
-	}*/,
-	
-	createOverload: function(arr) {
-        return function() {
-            var list = arr, len = arguments.length, i, l;
-            for (i = 0, l = list.length; i < l; i++) {
-                if (list[i].length == len) return (list[i].apply(this, arguments));
-            }
-
-            if(this.options.verbose) {
-            	console.log('Error: Class [' + this.className + '] does\'t have a method with [' + len + '] arguments!');
-            } else {
-            	alert('Error: Class [' + this.className + '] does\'t have a method with [' + len + '] arguments!');
-            }
-            return list[0].apply(this,arguments);
-        };
-    },
-	
-	methodOverload: function(obj, name, fn) {
-        var args = [];
-        switch (typeOf(fn)) {
-	        case 'function':
-	            args = [fn];
-	            break;
-	        default:
-	            args = fn;
-        }
-        
-        if (name in obj) args.unshift(obj[name]);        
-        obj[name] = this.createOverload(args);
-    },
-    
-    getOptionsArr: function(options) {
-    	var propertyValues = new Hash(options);
-    	//erase the id and style key
-    	propertyValues.erase('id');
-    	propertyValues.erase('style');
-
-		var argArray = new Array();
-		var i = 0;
-		propertyValues.each(function(value, key){
-			if(value) {
-				argArray[i] = value;
-				i++;
-			}
-		});
+	reorderActions: function() {
+		//make the array values as unique
+		this.options.actions = this.options.actions.unique();
 		
-		if(this.options.verbose) {
-			console.log(this.options.type + ' - Counted parameters = ' + argArray.length + ' => [' + argArray + ']');
+		//check methods
+		Array.each(this.options.actions, function(value, index){
+			if(!this.methods.contains(value)) {
+				if(this.options.verbose) 
+	    			console.error('Error: You are calling unknown method [' + value + ']!'); 
+			}	    		
+		}.bind(this));
+		
+		//check the joining between shadow and stroke
+		if(this.options.actions.contains('shadow') && this.options.actions.contains('stroke')) {
+			this.options.actions.erase('stroke');
+			if(this.options.verbose) 
+    			console.warn('Warning: You are just allowed to shadow or to stroke a shape!'); 
 		}
 		
-		return argArray;
-    },
+		//check if only shadow was activated
+		if(this.options.actions.length == 1 && this.options.actions.contains('shadow')) {
+			if(this.options.verbose) 
+    			console.warn('Warning: You are trying to shadow a shape without to filling it!');
+			
+			return false;
+		}
+		
+		//clone the original array
+		var tempArray        = Array.clone(this.options.actions);
+		
+		//empty the original array
+		this.options.actions.empty();
+		
+		//iterate the methods array and include the values to the action array
+		Array.each(this.methods, function(value, index){
+			if(tempArray.contains(value)) {
+				this.options.actions.include(value);
+			}
+		}.bind(this));
+		
+		return true;
+	},
+	
+	execMethod: function(methodName) {
+		//alert(this.className +' , '+ methodName);
+		try {
+			this.shape = new window[this.className]();
+			this.shape.draw.apply(this);
+			this.shape[methodName].apply(this);
+		} catch (oErr) {
+    		if(this.options.verbose) 
+    			console.error('Error: Method ( ' + 
+    					methodName + ' ) isn\'t implemented yet!'); 
+    	}
+	},
     
     createShapeElements: function() {
     	var canvas       = {};
+    	var specialTypes = ['circle'];
     	var div          = this.element;
-    	var borderWeight = 0;
-    	var shadow       = 0;
+    	var shadowBlur   = 0;
+    	this.shapeSize = 0;
     	
-    	if(this.options.shape.shadow) 
-    		shadow = this.options.shape.shadowOffset + 3;
+    	if(this.options.actions.contains('shadow'))
+    		shadowBlur = this.options.shape.shadowBlur;
     	
-    	
+    	/*if(this.options.actions.contains('stroke'))
+    		borderWeight = this.options.shape.borderWeight;*/
 
     	var left = 0;
     	var top  = 0;
-    	var shapeWidth  = this.options.shape.width  + borderWeight;
-    	var shapeHeight = this.options.shape.height + borderWeight;    	
-		this.options.div.width  += shapeWidth;
-		this.options.div.height += shapeHeight;
+    	this.shapeWidth  = this.options.shape.width + shadowBlur + this.shapeSize;
+    	this.shapeHeight = this.options.shape.height + shadowBlur + this.shapeSize;
+    	
+    	
+    	if(specialTypes.contains(this.options.type)) {
+    		//this.shapeSize = this.options.shape.width;
+    		this.shapeWidth  = this.options.shape.width + shadowBlur + this.shapeSize;
+        	this.shapeHeight = this.options.shape.width + shadowBlur + this.shapeSize; 
+    	}
+    	
+		this.options.div.width  += this.shapeWidth;
+		this.options.div.height += this.shapeHeight;
 		
     	if(this.options.title.text) {    		
-    		left = (this.options.div.width  / 2) - (shapeWidth / 2);
-    		top  = (this.options.div.height / 2) - (shapeHeight / 2);
+    		left = (this.options.div.width  / 2) - (this.shapeWidth / 2);
+    		top  = (this.options.div.height / 2) - (this.shapeHeight / 2);
     	}
     	
     	if(this.options.div.id) {
@@ -315,24 +284,25 @@ var mooShape = new Class({
     			'id'     : this.options.div.id,
     			'class'  : this.options.div.style
         	}).inject(this.element).setStyles({
-        		position : 'relative',
-        		width    : (this.options.div.width + shadow),
-        	    height   : (this.options.div.height + shadow),
-        	    top      : this.options.div.y,
-        	    left     : this.options.div.x
+        		'position' : 'relative',
+        		'border'   : 'solid 1px red',
+        		'width'    : this.options.div.width,
+        	    'height'   : this.options.div.height,
+        	    'top'      : this.options.div.y,
+        	    'left'     : this.options.div.x
         	});
     	}
     	
     	if(this.options.title.text) {
     		this.titleProperty = new Hash({
     				'pos': {
-    					'x': (shapeWidth / 2) - (this.titleSize / 2),
+    					'x': (this.shapeWidth / 2) - (this.titleSize / 2),
         				'y': -this.titleSize
     				},
     				'size': this.titleSize,
     				'shape': {
-    					'width': shapeWidth,
-    					'height': shapeHeight
+    					'width': this.shapeWidth,
+    					'height': this.shapeHeight
     				}
     		});
     		
@@ -342,11 +312,11 @@ var mooShape = new Class({
     			'height' : this.titleSize,
     			'class'  : this.options.title.style 
         	}).inject(div).setStyles({
-        		position : 'absolute',
-        		width    : this.titleSize,
-        	    height   : this.titleSize,
-        	    top      : this.titleProperty.pos.y,
-        	    left     : this.titleProperty.pos.x
+        		'position' : 'absolute',
+        		'width'    : this.titleSize,
+        	    'height'   : this.titleSize,
+        	    'top'      : this.titleProperty.pos.y,
+        	    'left'     : this.titleProperty.pos.x
         	});
     		
     		this.titleProperty.extend({
@@ -361,13 +331,14 @@ var mooShape = new Class({
     	
     	var canvShape = new Element('canvas', {
 			'id'     : this.options.shape.id,
-			'width'  : (this.options.shape.width + shadow),
-			'height' : (this.options.shape.height + shadow),
+			'width'  : this.shapeWidth,
+			'height' : this.shapeHeight,
 			'class'  : this.options.shape.style
     	}).inject(div).setStyles({
-    		position : 'absolute',
-    	    top      : top,
-    	    left     : left
+    		'position' : 'absolute',
+    		'border'   : 'solid 1px blue',
+    	    'top'      : top,
+    	    'left'     : left
     	});
     	
     	if (Browser.ie){
@@ -416,6 +387,10 @@ var mooShape = new Class({
     
     getClassName: function() {
     	return this.className;
+    },
+    
+    getOptions: function() {
+    	return this.options;
     },
     
     setType: function(type) {

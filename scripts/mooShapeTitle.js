@@ -1,23 +1,15 @@
 var mooShapeTitle = new Class({
 	Extends: mooShape,
-	
-	initialize: function(){    	
-    	this.methodOverload(
-    			this,
-    			'init',
-    			[    			 	
-    			 	function(a,b,c,d,e,f){
-    			 		this.ctx.title.font         = this.options.title.size 
-    			 										+ 'px ' 
-    			 										+ this.options.title.font;
-    			 		this.ctx.title.fillStyle    = this.options.title.color;
-    			 		this.ctx.title.textBaseline = 'middle';
-    			 		this.ctx.title.textAlign    = 'center'; 
-    			 		
-    			 		return true;
-    			 	}
-    			]
-    	);
+    
+    init: function() {
+    	this.ctx.title.font         = this.options.title.size 
+			+ 'px ' 
+			+ this.options.title.font;
+		this.ctx.title.fillStyle    = this.options.title.color;
+		this.ctx.title.textBaseline = 'middle';
+		this.ctx.title.textAlign    = 'center'; 
+		
+		return true;
     },
     
     plot: function(text, ctx, size) {
