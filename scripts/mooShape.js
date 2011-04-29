@@ -18,7 +18,7 @@
 
 var mooShape = new Class({
 	version   : '1.0',
-	jsPath    : './scripts/',
+	jsPath    : './scripts/shapes/',
 	className : 'mooShape',
 	type      : 'title',
 	titleSize : false,

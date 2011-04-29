@@ -139,7 +139,7 @@ window.addEvent('domready', function() {
 			text: 'Shape 135°',
 			color: [0,0,0],
 			size: 20,
-			rotate: '135',
+			rotate: '0',
 			align: 'top'
 		}
 	});
