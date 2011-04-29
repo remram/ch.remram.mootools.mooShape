@@ -34,10 +34,10 @@ var mooShape = new Class({
 		div: {
 			id: 'mooshpe-div',
 			style: 'mooshpe-div',
-			x: false,
-			y: false,
-			width: false,
-			height: false
+			x: 10,
+			y: 10,
+			width: 20,
+			height: 20
 		},
 		shape : {
 			id: 'mooshape-canvas',
@@ -247,28 +247,30 @@ var mooShape = new Class({
 	},
     
     createShapeElements: function() {
-    	var canvas       = {};
-    	var specialTypes = ['circle'];
-    	var div          = this.element;
-    	var shadowBlur   = 0;
-    	this.shapeSize = 0;
+    	var canvas        = {};
+    	var specialTypes  = ['circle'];
+    	var div           = this.element;
+    	var shadowBlur    = 0;
+    	var shadowOffset  = 0;
+    	this.borderWeight = 0;
     	
-    	if(this.options.actions.contains('shadow'))
-    		shadowBlur = this.options.shape.shadowBlur;
+    	if(this.options.actions.contains('shadow')) {
+    		shadowOffset = this.options.shape.shadowOffset;
+    		shadowBlur   = this.options.shape.shadowBlur;
+    	}
     	
-    	/*if(this.options.actions.contains('stroke'))
-    		borderWeight = this.options.shape.borderWeight;*/
+    	if(this.options.actions.contains('stroke'))
+    		this.borderWeight = this.options.shape.borderWeight;
 
     	var left = 0;
     	var top  = 0;
-    	this.shapeWidth  = this.options.shape.width + shadowBlur + this.shapeSize;
-    	this.shapeHeight = this.options.shape.height + shadowBlur + this.shapeSize;
+    	this.shapeWidth  = this.options.shape.width + shadowBlur + shadowOffset;
+    	this.shapeHeight = this.options.shape.height + shadowBlur + shadowOffset;
     	
     	
     	if(specialTypes.contains(this.options.type)) {
-    		//this.shapeSize = this.options.shape.width;
-    		this.shapeWidth  = this.options.shape.width + shadowBlur + this.shapeSize;
-        	this.shapeHeight = this.options.shape.width + shadowBlur + this.shapeSize; 
+    		this.shapeWidth  = (this.options.shape.width * 2) + shadowBlur + shadowOffset + (this.borderWeight * 2);
+        	this.shapeHeight = (this.options.shape.width * 2) + shadowBlur + shadowOffset + (this.borderWeight * 2); 
     	}
     	
 		this.options.div.width  += this.shapeWidth;
@@ -285,7 +287,7 @@ var mooShape = new Class({
     			'class'  : this.options.div.style
         	}).inject(this.element).setStyles({
         		'position' : 'relative',
-        		'border'   : 'solid 1px red',
+        		/*'border'   : 'solid 1px red',*/
         		'width'    : this.options.div.width,
         	    'height'   : this.options.div.height,
         	    'top'      : this.options.div.y,
@@ -313,6 +315,7 @@ var mooShape = new Class({
     			'class'  : this.options.title.style 
         	}).inject(div).setStyles({
         		'position' : 'absolute',
+        		'border'   : 'solid 1px yellow',
         		'width'    : this.titleSize,
         	    'height'   : this.titleSize,
         	    'top'      : this.titleProperty.pos.y,
@@ -323,7 +326,7 @@ var mooShape = new Class({
     			'element': canvTitle
     		});
     		
-    		if (Browser.ie){
+    		if (Browser.ie && Browser.version < 9){
         		G_vmlCanvasManager.initElement(canvTitle);
         	}
     		Object.append(canvas, {'title': canvTitle.getContext('2d')});
@@ -341,7 +344,7 @@ var mooShape = new Class({
     	    'left'     : left
     	});
     	
-    	if (Browser.ie){
+    	if (Browser.ie && Browser.version < 9){
     		G_vmlCanvasManager.initElement(canvShape);
     	}
     	

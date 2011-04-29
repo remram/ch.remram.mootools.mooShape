@@ -1,6 +1,6 @@
 window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'rectangle',
 		actions: ['stroke'],
 		div: {
@@ -19,9 +19,9 @@ window.addEvent('domready', function() {
 	});
 
 	new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'circle',
-		actions: ['fill','shadow'],
+		actions: ['fill','stroke'],
 		opacity: 1,
 		div: {
 			id: 'rectangle_2',
@@ -30,11 +30,11 @@ window.addEvent('domready', function() {
 		},
 		shape: {
 			id: 'rect2',
-			width: 10,
-			height: 10,
+			width: 50,
+			height: 100,
 			color: [255,100,60],
 			shadowOffset: 10,
-			shadowBlur: 50,
+			shadowBlur: 5,
 			shadowColor: '#360',
 			borderWeight: 10,
 			borderColor: '#c6f829'
@@ -43,13 +43,13 @@ window.addEvent('domready', function() {
 			text: 'Shape 2',
 			size: 50,
 			color: '#cfcfcf',
-			rotate: '45',
-			align: 'bottom-right'
+			rotate: '315',
+			align: 'top-right'
 		}
 	});
 
 	var rec3 = new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'rectangle',
 		actions: ['fill','shadow'],
 		div: {
@@ -67,7 +67,7 @@ window.addEvent('domready', function() {
 		title: {
 			text: 'Shape 3',
 			rotate: '315',
-			align: 'top'
+			align: 'top-right'
 		}
 	});
 	
@@ -80,7 +80,7 @@ window.addEvent('domready', function() {
 	});
 
 	new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'rectangle',
 		div: {
 			id: 'rectangle_5',
@@ -99,7 +99,7 @@ window.addEvent('domready', function() {
 	});
 
 	new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'rectangle',
 		actions: ['fill'],
 		div: {
@@ -121,7 +121,7 @@ window.addEvent('domready', function() {
 	});
 
 	new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'rectangle',
 		actions: ['shadow','fill'],
 		div: {
@@ -138,9 +138,9 @@ window.addEvent('domready', function() {
 		title: {
 			text: 'Shape 135°',
 			color: [0,0,0],
-			size: 40,
+			size: 20,
 			rotate: '135',
-			align: 'bottom'
+			align: 'top'
 		}
 	});
 });

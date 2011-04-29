@@ -2,8 +2,8 @@ var mooShapeCircle = new Class({
 	Extends: mooShape,
     
     draw: function() {
-    	var x = this.options.shape.width + (this.options.shape.width / 9);
-    	var y = this.options.shape.width + (this.options.shape.width / 9);
+    	var x = this.options.shape.width + this.borderWeight;
+    	var y = this.options.shape.width + this.borderWeight;
  		this.ctx.shape.fillStyle = this.options.shape.color;
 		this.ctx.shape.beginPath();
 		this.ctx.shape.arc(x, y, this.options.shape.width, 0, Math.PI*2, true); 
