@@ -42,6 +42,7 @@ var mooShape = new Class({
 		shape : {
 			id: 'mooshape-canvas',
 			style: 'mooshape-canvas',
+			rotate: '0',
 			width: 20,
 			height: 20,
 			color: [255,0,0],
@@ -67,7 +68,7 @@ var mooShape = new Class({
     	this.element = $(el); if (!this.element) return;    	
     	this.setOptions(options);    	
     	this.prepareOptions();
-    	this.reorderActions();
+    	this.reorderActions(true);
     	this.createShapeElements();
     	this.assetJsFile();    	
     },
@@ -84,14 +85,11 @@ var mooShape = new Class({
     	
     	this.options.shape.color = 'rgba(' + this.getColorAsRGB(this.options.shape.color) + ',' + opacity + ')';
     	this.options.shape.shadowColor = 'rgba(' + this.getColorAsRGB(this.options.shape.shadowColor) + ',' + opacity + ')';
+    	this.options.shape.borderColor = 'rgba(' + this.getColorAsRGB(this.options.shape.borderColor) + ',' + opacity + ')';
     	
     	if(this.options.title.text) {
     		this.options.title.color = 'rgba(' + this.getColorAsRGB(this.options.title.color) + ',' + opacity + ')';
     		this.titleSize = this.options.title.size.toInt()*4 + (this.options.title.text.length * (this.options.title.size.toInt() * .3));
-    	}
-    	
-    	if(this.options.shape.borderColor == false) {
-    		this.options.shape.borderColor = 'rgba(' + this.getColorAsRGB(this.options.shape.borderColor) + ',' + opacity + ')';
     	}
     },
 	
@@ -171,6 +169,7 @@ var mooShape = new Class({
 		this.className = 'mooShape' + this.ucFirst(this.options.type);
 		try {
 			this.shape = new window[this.className]();
+			this.options.actions.combine(this.shape.methods);
 			this.shape.draw.apply(this);
 			Array.each(this.options.actions, function(value, index){
 				try {
@@ -190,7 +189,7 @@ var mooShape = new Class({
     	}
 	},
 	
-	reorderActions: function() {
+	reorderActions: function(warn) {
 		//make the array values as unique
 		this.options.actions = this.options.actions.unique();
 		
@@ -205,13 +204,13 @@ var mooShape = new Class({
 		//check the joining between shadow and stroke
 		if(this.options.actions.contains('shadow') && this.options.actions.contains('stroke')) {
 			this.options.actions.erase('stroke');
-			if(this.options.verbose) 
+			if(this.options.verbose && warn) 
     			console.warn('Warning: You are just allowed to shadow or to stroke a shape!'); 
 		}
 		
 		//check if only shadow was activated
 		if(this.options.actions.length == 1 && this.options.actions.contains('shadow')) {
-			if(this.options.verbose) 
+			if(this.options.verbose && warn) 
     			console.warn('Warning: You are trying to shadow a shape without to filling it!');
 			
 			return false;
@@ -248,29 +247,36 @@ var mooShape = new Class({
     
     createShapeElements: function() {
     	var canvas        = {};
-    	var specialTypes  = ['circle'];
+    	var specialTypes  = ['circle','star'];
     	var div           = this.element;
-    	var shadowBlur    = 0;
-    	var shadowOffset  = 0;
+    	this.shadowBlur    = 0;
+    	this.shadowOffset  = 0;
     	this.borderWeight = 0;
     	
     	if(this.options.actions.contains('shadow')) {
-    		shadowOffset = this.options.shape.shadowOffset;
-    		shadowBlur   = this.options.shape.shadowBlur;
+    		this.shadowOffset = this.options.shape.shadowOffset;
+    		this.shadowBlur   = this.options.shape.shadowBlur*0.1;
     	}
     	
-    	if(this.options.actions.contains('stroke'))
-    		this.borderWeight = this.options.shape.borderWeight;
+    	if(this.options.actions.contains('stroke')) {
+    		(this.options.shape.borderWeight > 10) ? this.borderWeight = 10 : this.borderWeight = this.options.shape.borderWeight;
+    	}
 
     	var left = 0;
     	var top  = 0;
-    	this.shapeWidth  = this.options.shape.width + shadowBlur + shadowOffset;
-    	this.shapeHeight = this.options.shape.height + shadowBlur + shadowOffset;
+    	this.shapeWidth  = this.options.shape.width + this.shadowBlur + this.shadowOffset;
+    	this.shapeHeight = this.options.shape.height + this.shadowBlur + this.shadowOffset;
     	
     	
     	if(specialTypes.contains(this.options.type)) {
-    		this.shapeWidth  = (this.options.shape.width * 2) + shadowBlur + shadowOffset + (this.borderWeight * 2);
-        	this.shapeHeight = (this.options.shape.width * 2) + shadowBlur + shadowOffset + (this.borderWeight * 2); 
+    		if(this.options.type == 'circle') {
+    			this.shapeWidth  = (this.options.shape.width * 2) + this.shadowBlur + this.shadowOffset + (this.borderWeight * 2);
+            	this.shapeHeight = (this.options.shape.width * 2) + this.shadowBlur + this.shadowOffset + (this.borderWeight * 2);
+    		} else if(this.options.type == 'star' || this.options.type == 'triangle') {
+    			this.shapeWidth  = this.shapeHeight = this.options.shape.width + 
+    												this.shadowBlur + this.shadowOffset + 
+    												this.borderWeight;
+    		} 
     	}
     	
 		this.options.div.width  += this.shapeWidth;
@@ -339,7 +345,7 @@ var mooShape = new Class({
 			'class'  : this.options.shape.style
     	}).inject(div).setStyles({
     		'position' : 'absolute',
-    		'border'   : 'solid 1px blue',
+    		/*'border'   : 'solid 1px blue',*/
     	    'top'      : top,
     	    'left'     : left
     	});

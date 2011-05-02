@@ -14,7 +14,7 @@ var mooShapeCircle = new Class({
     },
     
     stroke: function() {
-    	this.ctx.shape.lineWidth     = this.options.shape.borderWeight;
+    	this.ctx.shape.lineWidth     = this.borderWeight;
 		this.ctx.shape.strokeStyle   = this.options.shape.borderColor;
 		this.ctx.shape.stroke();
     },
