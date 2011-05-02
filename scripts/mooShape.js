@@ -247,7 +247,7 @@ var mooShape = new Class({
     
     createShapeElements: function() {
     	var canvas        = {};
-    	var specialTypes  = ['circle','star'];
+    	var specialTypes  = ['circle','star','triangle'];
     	var div           = this.element;
     	this.shadowBlur    = 0;
     	this.shadowOffset  = 0;
@@ -345,7 +345,7 @@ var mooShape = new Class({
 			'class'  : this.options.shape.style
     	}).inject(div).setStyles({
     		'position' : 'absolute',
-    		/*'border'   : 'solid 1px blue',*/
+    		'border'   : 'solid 1px blue',
     	    'top'      : top,
     	    'left'     : left
     	});

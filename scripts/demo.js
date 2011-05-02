@@ -12,8 +12,8 @@ window.addEvent('domready', function() {
 			style: 'my-shape-style-1',
 			width: 300,
 			color: '#036',
-			shadowOffset: 100,
-			shadowBlur: 10,
+			shadowOffset: 20,
+			shadowBlur: 5,
 			borderWeight: 5,
 			borderColor: '#f00'
 		}
@@ -104,15 +104,14 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'triangle',
-		actions: ['fill','stroke','shadow'],
+		actions: ['fill'],
 		div: {
 			id: 'rectangle_x',
 			x : 500,
-			y : -700
+			y : -500
 		},
 		shape: {
-			width: 100,
-			height: 100,
+			width: 400,
 			rotate: '45',
 			color: '#391',
 			shadowOffset: 10,
