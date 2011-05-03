@@ -2,7 +2,7 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'star',
-		actions: ['fill','stroke','shadow'],
+		actions: ['fill','shadow'],
 		div: {
 			id: 'rectangle_1',
 			style: 'my-div-style-1'
@@ -59,8 +59,8 @@ window.addEvent('domready', function() {
 			y : -50
 		},
 		shape: {
-			width: 60,
-			height: 60,
+			width: 200,
+			height: 150,
 			color: '#767',
 			shadowOffset: 10,
 			shadowBlur: 5/*,
@@ -104,7 +104,7 @@ window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'triangle',
-		actions: ['fill'],
+		actions: ['fill','stroke'],
 		div: {
 			id: 'rectangle_x',
 			x : 500,
@@ -112,7 +112,7 @@ window.addEvent('domready', function() {
 		},
 		shape: {
 			width: 400,
-			rotate: '45',
+			rotate: '270',
 			color: '#391',
 			shadowOffset: 10,
 			shadowBlur: 50,
@@ -129,18 +129,19 @@ window.addEvent('domready', function() {
 
 	new mooShape('mooShapeContainer', {
 		verbose: true,
-		type: 'rectangle',
-		actions: ['shadow','fill'],
+		type: 'arrow',
+		actions: ['fill','shadow'],
 		div: {
 			id: 'rectangle_y',
-			x : 800,
-			y : -100
+			x : 1300,
+			y : -800
 		},
 		shape: {
-			width: 10,
+			width: 50,
 			height: 10,
-			color: [0,0,255],
-			shadowOffset: 2
+			rotate: '90',
+			color: '#fff',
+			shadowOffset: 3
 		},
 		title: {
 			text: 'Shape 135°',

@@ -3,7 +3,8 @@
 */
 
 var mooShapeStar = new Class({
-	Extends: mooShape,
+	Extends			: mooShape,
+	extraMethods	: [],
 	
 	draw: function() {
     	var x = y = this.shapeWidth - (this.shadowBlur + this.shadowOffset);
@@ -15,10 +16,12 @@ var mooShapeStar = new Class({
 		this.ctx.shape.lineTo( 0 + this.borderWeight		, (y/3) + this.borderWeight);
 		this.ctx.shape.lineTo( x - this.borderWeight		, (y/3) + this.borderWeight);
 		this.ctx.shape.closePath();
+		return true;
     },
     
     fill: function() {
     	this.ctx.shape.fill();
+		return true;
     },
     
     stroke: function() {
@@ -26,6 +29,7 @@ var mooShapeStar = new Class({
 		this.ctx.shape.strokeStyle   = this.options.shape.borderColor;
 		this.ctx.shape.stroke();
 		this.ctx.shape.fill();
+		return true;
     },
     
     shadow: function() {
@@ -33,5 +37,6 @@ var mooShapeStar = new Class({
 		this.ctx.shape.shadowBlur    = this.options.shape.shadowBlur;
 		this.ctx.shape.shadowOffsetX = this.options.shape.shadowOffset;
 		this.ctx.shape.shadowOffsetY = this.options.shape.shadowOffset;
+		return true;
     }
 });

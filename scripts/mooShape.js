@@ -169,8 +169,15 @@ var mooShape = new Class({
 		this.className = 'mooShape' + this.ucFirst(this.options.type);
 		try {
 			this.shape = new window[this.className]();
-			this.options.actions.combine(this.shape.methods);
+			//try to add extra methods as prepend and merge it to one array
+			this.shape.extraMethods.combine(this.options.actions);
+			//empty the action array
+			this.options.actions.empty();
+			//fill the action array
+			this.options.actions = Array.clone(this.shape.extraMethods);
+			//apply the draw method
 			this.shape.draw.apply(this);
+			//try to execute each method inside the action array
 			Array.each(this.options.actions, function(value, index){
 				try {
 					this.shape[value].apply(this);
@@ -247,7 +254,7 @@ var mooShape = new Class({
     
     createShapeElements: function() {
     	var canvas        = {};
-    	var specialTypes  = ['circle','star','triangle'];
+    	var specialTypes  = ['circle','star','triangle','arrow'];
     	var div           = this.element;
     	this.shadowBlur    = 0;
     	this.shadowOffset  = 0;
@@ -272,7 +279,7 @@ var mooShape = new Class({
     		if(this.options.type == 'circle') {
     			this.shapeWidth  = (this.options.shape.width * 2) + this.shadowBlur + this.shadowOffset + (this.borderWeight * 2);
             	this.shapeHeight = (this.options.shape.width * 2) + this.shadowBlur + this.shadowOffset + (this.borderWeight * 2);
-    		} else if(this.options.type == 'star' || this.options.type == 'triangle') {
+    		} else if(specialTypes.contains(this.options.type)) {
     			this.shapeWidth  = this.shapeHeight = this.options.shape.width + 
     												this.shadowBlur + this.shadowOffset + 
     												this.borderWeight;

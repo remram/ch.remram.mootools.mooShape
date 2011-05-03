@@ -1,5 +1,6 @@
 var mooShapeRectangle = new Class({
-	Extends: mooShape,
+	Extends			: mooShape,
+	extraMethods	: [],
     
     draw: function() {
     	var x = y = 0;
@@ -11,16 +12,19 @@ var mooShapeRectangle = new Class({
 		this.ctx.shape.lineTo(x + this.options.shape.width	, y);
 		this.ctx.shape.lineTo(x								, y); 
 		this.ctx.shape.closePath();
+		return true;
     },
     
     fill: function() {
     	this.ctx.shape.fill();
+		return true;
     },
     
     stroke: function() {
     	this.ctx.shape.lineWidth     = this.borderWeight;
 		this.ctx.shape.strokeStyle   = this.options.shape.borderColor;
 		this.ctx.shape.stroke();
+		return true;
     },
     
     shadow: function() {
@@ -28,5 +32,6 @@ var mooShapeRectangle = new Class({
 		this.ctx.shape.shadowBlur    = this.options.shape.shadowBlur;
 		this.ctx.shape.shadowOffsetX = this.options.shape.shadowOffset;
 		this.ctx.shape.shadowOffsetY = this.options.shape.shadowOffset;
+		return true;
     }
 });

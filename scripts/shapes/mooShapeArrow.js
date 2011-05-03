@@ -2,7 +2,7 @@
 * extend the mooShape class
 */
 
-var mooShapeTriangle = new Class({
+var mooShapeArrow = new Class({
 	Extends			: mooShape,
 	extraMethods	: ['rotate','drawIt'],
     
@@ -29,11 +29,20 @@ var mooShapeTriangle = new Class({
     
     drawIt: function() {
     	var x = y = this.shapeWidth - (this.shadowBlur + this.shadowOffset);
+    	var factor = 16;
     	this.ctx.shape.fillStyle = this.options.shape.color;
 		this.ctx.shape.beginPath();
-		this.ctx.shape.moveTo( 0 + this.borderWeight		, 0 + this.borderWeight);
-		this.ctx.shape.lineTo( x - this.borderWeight		, (y/2));
-		this.ctx.shape.lineTo( 0 + this.borderWeight		, y - this.borderWeight);
+		
+		this.ctx.shape.moveTo( 0 + this.borderWeight						, ( (y + this.borderWeight) / factor) * 7); //1
+		this.ctx.shape.lineTo( ((x - this.borderWeight) / factor) * 12		, ( (y + this.borderWeight) / factor) * 7); //2
+		this.ctx.shape.lineTo( ((x - this.borderWeight) / factor) * 12		, ( (y + this.borderWeight) / factor) * 4); //3
+		this.ctx.shape.lineTo( x - this.borderWeight						, (y/2)); //4
+		this.ctx.shape.lineTo( ((x - this.borderWeight) / factor) * 12		, ( (y + this.borderWeight) / factor) * 12); //5
+		this.ctx.shape.lineTo( ((x - this.borderWeight) / factor) * 12		, ( (y + this.borderWeight) / factor) * 9); //6
+		this.ctx.shape.lineTo( 0 + this.borderWeight						, ( (y + this.borderWeight) / factor) * 9); //7
+		
+		
+		
 		this.ctx.shape.closePath();   	
     },
     
