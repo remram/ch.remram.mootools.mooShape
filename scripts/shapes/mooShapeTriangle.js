@@ -4,7 +4,8 @@
 
 var mooShapeTriangle = new Class({
 	Extends			: mooShape,
-	extraMethods	: ['rotate','drawIt'],
+	prependMethods	: ['rotate','drawIt'],
+	appendMethods	: [],
     
 	draw: function() {
 		return true;

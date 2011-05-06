@@ -14,8 +14,6 @@
  */
 
 
-
-
 var mooShape = new Class({
 	version   : '1.0',
 	jsPath    : './scripts/shapes/',
@@ -23,8 +21,12 @@ var mooShape = new Class({
 	type      : 'title',
 	titleSize : false,
 	methods   : ['shadow', 'fill', 'stroke'],
+	
+	/*mooShape : new Hash,
+	mooTitle : new Hash,*/
+	mooDiv   : new Hash,
 
-	Implements: Options,
+	Implements: [Options, Chain],
 	
 	options: {
 		verbose: false,
@@ -70,8 +72,16 @@ var mooShape = new Class({
     	this.prepareOptions();
     	this.reorderActions(true);
     	this.createShapeElements();
-    	this.assetJsFile();    	
-    },
+    	this.assetJsFile();
+    }/*,
+    
+    reInit: function() {
+    	//this.className = 'mooShape' + this.ucFirst(this.options.type);
+    	this.prepareOptions();
+    	this.reorderActions(true);
+    	this.createShapeElements();
+    	this.initClass();
+    }*/,
     
     prepareOptions: function() {
     	var opacity = 1;
@@ -91,15 +101,15 @@ var mooShape = new Class({
     		this.options.title.color = 'rgba(' + this.getColorAsRGB(this.options.title.color) + ',' + opacity + ')';
     		this.titleSize = this.options.title.size.toInt()*4 + (this.options.title.text.length * (this.options.title.size.toInt() * .3));
     	}
-    },
+    }.protect(),
 	
-	assetSystemJsFiles: function() {
+	assetTitleJsFiles: function() {
 		this.className = 'mooShape' + this.ucFirst(this.type);
 		var source = this.jsPath + this.className + '.js';
 
 		if($(this.className + '-jsfile')) {
 			this.initSystemClass.delay(100, this);
-			return true;
+			return;
 		}
 		
 		// If the class wasn't loaded, we try to load by the Asset method
@@ -110,8 +120,8 @@ var mooShape = new Class({
 		    }.bind(this)
 		});
 		
-		return true;
-	},
+		return;
+	}.protect(),
 	
 	initSystemClass: function() {
 		this.className = 'mooShape' + this.ucFirst(this.type);
@@ -121,6 +131,9 @@ var mooShape = new Class({
 			title.rotate(this.options.title.rotate, this.ctx.title, this.titleSize, this.options.verbose);
 			title.alignment(this.options.title, this.titleProperty, this.options.verbose);
 			title.plot(this.options.title.text, this.ctx.title, this.titleSize);
+			
+			/*var length = this.mooTitle.getLength();
+			this.mooTitle.include(++length, title);*/
     	} catch (oErr) {
     		if(this.options.verbose) 
     			console.error('Error: Class ( ' + 
@@ -151,7 +164,7 @@ var mooShape = new Class({
     	// If the class already loaded try to init the class   
 		if($(this.className + '-jsfile')) {
 			this.initClass.delay(100, this);
-			return true;
+			return;
 		}
 		
 		// If the class wasn't loaded, we try to load by the Asset method
@@ -162,19 +175,23 @@ var mooShape = new Class({
 		    }.bind(this)
 		});
 		
-		return true;
-	},
+		return;
+	}.protect(),
 	
 	initClass: function() {
 		this.className = 'mooShape' + this.ucFirst(this.options.type);
 		try {
 			this.shape = new window[this.className]();
+			
+			/*var length = this.mooShape.getLength();
+			this.mooShape.include(++length, this.shape);*/
+			
 			//try to add extra methods as prepend and merge it to one array
-			this.shape.extraMethods.combine(this.options.actions);
+			this.shape.prependMethods.combine(this.options.actions);
 			//empty the action array
 			this.options.actions.empty();
 			//fill the action array
-			this.options.actions = Array.clone(this.shape.extraMethods);
+			this.options.actions = Array.clone(this.shape.prependMethods).combine(this.shape.appendMethods);
 			//apply the draw method
 			this.shape.draw.apply(this);
 			//try to execute each method inside the action array
@@ -183,8 +200,9 @@ var mooShape = new Class({
 					this.shape[value].apply(this);
 				} catch (oErr) {
 		    		if(this.options.verbose) 
-		    			console.error('Error: Method ( ' + 
-		    					value + ' ) isn\'t implemented yet!'); 
+		    			console.error('Error: The class [' + this.className 
+		    					+ '] doesn\'t contain a method as ( ' + 
+		    					value + ' )!'); 
 		    	}
 			}.bind(this));
 		} catch (oErr) {
@@ -237,11 +255,17 @@ var mooShape = new Class({
 		}.bind(this));
 		
 		return true;
-	},
+	}.protect(),
 	
-	execMethod: function(methodName) {
+	execMethod: function(shape22, action) {
 		//alert(this.className +' , '+ methodName);
-		try {
+		
+		//this.mooShape
+		//console.warn(shape, action );
+		var temp = new mooShapeTitle();
+		temp.testMethode.apply(this);
+		
+		/*try {
 			this.shape = new window[this.className]();
 			this.shape.draw.apply(this);
 			this.shape[methodName].apply(this);
@@ -249,16 +273,27 @@ var mooShape = new Class({
     		if(this.options.verbose) 
     			console.error('Error: Method ( ' + 
     					methodName + ' ) isn\'t implemented yet!'); 
-    	}
+    	}*/
 	},
     
     createShapeElements: function() {
-    	var canvas        = {};
-    	var specialTypes  = ['circle','star','triangle','arrow'];
-    	var div           = this.element;
+    	var divLength = this.mooDiv.getLength();
+		this.mooDiv.include('mooshpe-div-' + ++divLength, divLength);  
+		
+    	if(this.options.div.id == 'mooshpe-div') 
+    		this.options.div.id = this.options.div.id + '-' + divLength;    	
+    	if(this.options.shape.id == 'mooshape-canvas') 
+    		this.options.shape.id = this.options.shape.id + '-' + divLength;    	
+    	if(this.options.title.id == 'mooshape-title') 
+    		this.options.title.id = this.options.title.id + '-' + divLength;
+    	
+		
+    	var canvas         = {};
+    	var div            = this.element;
+    	this.specialTypes  = ['circle','star','triangle','arrow'];
     	this.shadowBlur    = 0;
     	this.shadowOffset  = 0;
-    	this.borderWeight = 0;
+    	this.borderWeight  = 0;
     	
     	if(this.options.actions.contains('shadow')) {
     		this.shadowOffset = this.options.shape.shadowOffset;
@@ -275,11 +310,11 @@ var mooShape = new Class({
     	this.shapeHeight = this.options.shape.height + this.shadowBlur + this.shadowOffset;
     	
     	
-    	if(specialTypes.contains(this.options.type)) {
+    	if(this.specialTypes.contains(this.options.type)) {
     		if(this.options.type == 'circle') {
     			this.shapeWidth  = (this.options.shape.width * 2) + this.shadowBlur + this.shadowOffset + (this.borderWeight * 2);
             	this.shapeHeight = (this.options.shape.width * 2) + this.shadowBlur + this.shadowOffset + (this.borderWeight * 2);
-    		} else if(specialTypes.contains(this.options.type)) {
+    		} else {
     			this.shapeWidth  = this.shapeHeight = this.options.shape.width + 
     												this.shadowBlur + this.shadowOffset + 
     												this.borderWeight;
@@ -300,7 +335,6 @@ var mooShape = new Class({
     			'class'  : this.options.div.style
         	}).inject(this.element).setStyles({
         		'position' : 'relative',
-        		/*'border'   : 'solid 1px red',*/
         		'width'    : this.options.div.width,
         	    'height'   : this.options.div.height,
         	    'top'      : this.options.div.y,
@@ -328,7 +362,6 @@ var mooShape = new Class({
     			'class'  : this.options.title.style 
         	}).inject(div).setStyles({
         		'position' : 'absolute',
-        		'border'   : 'solid 1px yellow',
         		'width'    : this.titleSize,
         	    'height'   : this.titleSize,
         	    'top'      : this.titleProperty.pos.y,
@@ -352,7 +385,6 @@ var mooShape = new Class({
 			'class'  : this.options.shape.style
     	}).inject(div).setStyles({
     		'position' : 'absolute',
-    		'border'   : 'solid 1px blue',
     	    'top'      : top,
     	    'left'     : left
     	});
@@ -366,9 +398,9 @@ var mooShape = new Class({
     	this.ctx = canvas;
     	
     	if(this.options.title.text) {
-    		this.assetSystemJsFiles();
+    		this.assetTitleJsFiles();
     	}
-    },
+    }.protect(),
     
     /**
      * Convert the first char to capital
@@ -379,7 +411,7 @@ var mooShape = new Class({
     	var word = str.toLowerCase();
         var firstChar = word.charAt(0).toUpperCase();
         return firstChar + word.substr(1);
-    },
+    }.protect(),
     
     /**
      * This function try to convert a hex color such as #f00 to rgb like [255,0,0]
@@ -391,6 +423,10 @@ var mooShape = new Class({
     		return color.hexToRgb(true);
     	}
     	return color;
+    }.protect(),
+    
+    getObj: function() {
+    	return this.mooShape;
     },
     
     getVersion: function() {

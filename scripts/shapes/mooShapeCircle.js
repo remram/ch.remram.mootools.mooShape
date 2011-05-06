@@ -1,6 +1,7 @@
 var mooShapeCircle = new Class({
 	Extends			: mooShape,
-	extraMethods	: [],
+	prependMethods	: [],
+	appendMethods	: [],
     
     draw: function() {
     	var x = y = this.options.shape.width + this.borderWeight;

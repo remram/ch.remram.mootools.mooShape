@@ -1,6 +1,7 @@
 var mooShapeRectangle = new Class({
 	Extends			: mooShape,
-	extraMethods	: [],
+	prependMethods	: [],
+	appendMethods	: [],
     
     draw: function() {
     	var x = y = 0;

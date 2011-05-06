@@ -4,7 +4,8 @@
 
 var mooShapeStar = new Class({
 	Extends			: mooShape,
-	extraMethods	: [],
+	prependMethods	: [],
+	appendMethods	: [],
 	
 	draw: function() {
     	var x = y = this.shapeWidth - (this.shadowBlur + this.shadowOffset);

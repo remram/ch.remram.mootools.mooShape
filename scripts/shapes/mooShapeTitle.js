@@ -12,6 +12,8 @@ var mooShapeTitle = new Class({
 		return true;
     },
     
+    testMethode: function() {alert('yes testMethode');},
+    
     plot: function(text, ctx, size) {
     	ctx.fillText(text, (size/2), (size/2) );
     	return true;

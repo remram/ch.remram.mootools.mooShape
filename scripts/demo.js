@@ -8,7 +8,6 @@ window.addEvent('domready', function() {
 			style: 'my-div-style-1'
 		},		
 		shape: {
-			id: 'rect1',
 			style: 'my-shape-style-1',
 			width: 300,
 			color: '#036',
@@ -25,7 +24,6 @@ window.addEvent('domready', function() {
 		actions: ['fill','stroke'],
 		opacity: 1,
 		div: {
-			id: 'rectangle_2',
 			x : 200,
 			y : 400
 		},
@@ -86,7 +84,6 @@ window.addEvent('domready', function() {
 		verbose: true,
 		type: 'rectangle',
 		div: {
-			id: 'rectangle_5',
 			style: 'my-div-style-2',
 			y: 10
 		},		
@@ -105,6 +102,7 @@ window.addEvent('domready', function() {
 		verbose: true,
 		type: 'triangle',
 		actions: ['fill','stroke'],
+		opacity: .5,
 		div: {
 			id: 'rectangle_x',
 			x : 500,
@@ -127,18 +125,16 @@ window.addEvent('domready', function() {
 		}
 	});
 
-	new mooShape('mooShapeContainer', {
+	var arrow = new mooShape('mooShapeContainer', {
 		verbose: true,
 		type: 'arrow',
-		actions: ['fill','shadow'],
+		actions: ['fill'],
 		div: {
-			id: 'rectangle_y',
 			x : 1300,
 			y : -800
 		},
 		shape: {
-			width: 50,
-			height: 10,
+			width: 80,
 			rotate: '90',
 			color: '#fff',
 			shadowOffset: 3
@@ -151,4 +147,16 @@ window.addEvent('domready', function() {
 			align: 'top'
 		}
 	});
+	
+	//arrow.execMethod('title', 'testMethode');
+	//console.warn();
+	//console.log(Object.keys(shapeObj));
+	console.log(Object.keys(arrow.ctx));
+	//arrow.mooCanv.stroke();
+	
+	//arrow.setOptions({action: ['fill','shadow'], shape:{shadowColor: '#360', rotate: '180'}});
+	//arrow.reInit();
+	//arrow.reInit();
+	
+	//console.log(arrow.options);
 });
