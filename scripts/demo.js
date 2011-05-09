@@ -4,7 +4,7 @@ window.addEvent('domready', function() {
 		type: 'star',
 		actions: ['fill','shadow'],
 		div: {
-			id: 'rectangle_1',
+			id: 'shape_1',
 			style: 'my-div-style-1'
 		},		
 		shape: {
@@ -24,6 +24,7 @@ window.addEvent('domready', function() {
 		actions: ['fill','stroke'],
 		opacity: 1,
 		div: {
+			id: 'shape_2',
 			x : 200,
 			y : 400
 		},
@@ -52,7 +53,7 @@ window.addEvent('domready', function() {
 		type: 'rectangle',
 		actions: ['fill','shadow'],
 		div: {
-			id: 'rectangle_3',
+			id: 'shape_3',
 			x : 200,
 			y : -50
 		},
@@ -84,6 +85,7 @@ window.addEvent('domready', function() {
 		verbose: true,
 		type: 'rectangle',
 		div: {
+			id: 'shape_5',
 			style: 'my-div-style-2',
 			y: 10
 		},		
@@ -104,7 +106,7 @@ window.addEvent('domready', function() {
 		actions: ['fill','stroke'],
 		opacity: .5,
 		div: {
-			id: 'rectangle_x',
+			id: 'shape_6',
 			x : 500,
 			y : -500
 		},
@@ -130,6 +132,7 @@ window.addEvent('domready', function() {
 		type: 'arrow',
 		actions: ['fill'],
 		div: {
+			id: 'shape_7',
 			x : 1300,
 			y : -800
 		},

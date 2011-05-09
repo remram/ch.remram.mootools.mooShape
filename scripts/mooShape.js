@@ -13,7 +13,6 @@
  * @copyright	Solexperts AG
  */
 
-
 var mooShape = new Class({
 	version   : '1.0',
 	jsPath    : './scripts/shapes/',
@@ -24,7 +23,8 @@ var mooShape = new Class({
 	
 	/*mooShape : new Hash,
 	mooTitle : new Hash,*/
-	mooDiv   : new Hash,
+	mooDiv   : new Hash(),
+	jsfiles  : new Hash(),
 
 	Implements: [Options, Chain],
 	
@@ -66,22 +66,14 @@ var mooShape = new Class({
 		}
 	},
 
-    initialize: function(el, options){
+    initialize: function(el,options){
     	this.element = $(el); if (!this.element) return;    	
-    	this.setOptions(options);    	
+    	this.setOptions(options);
     	this.prepareOptions();
     	this.reorderActions(true);
     	this.createShapeElements();
     	this.assetJsFile();
-    }/*,
-    
-    reInit: function() {
-    	//this.className = 'mooShape' + this.ucFirst(this.options.type);
-    	this.prepareOptions();
-    	this.reorderActions(true);
-    	this.createShapeElements();
-    	this.initClass();
-    }*/,
+    },
     
     prepareOptions: function() {
     	var opacity = 1;
@@ -101,25 +93,13 @@ var mooShape = new Class({
     		this.options.title.color = 'rgba(' + this.getColorAsRGB(this.options.title.color) + ',' + opacity + ')';
     		this.titleSize = this.options.title.size.toInt()*4 + (this.options.title.text.length * (this.options.title.size.toInt() * .3));
     	}
+    	return;
     }.protect(),
 	
 	assetTitleJsFiles: function() {
 		this.className = 'mooShape' + this.ucFirst(this.type);
-		var source = this.jsPath + this.className + '.js';
-
-		if($(this.className + '-jsfile')) {
-			this.initSystemClass.delay(100, this);
-			return;
-		}
-		
-		// If the class wasn't loaded, we try to load by the Asset method
-		Asset.javascript(source, {
-			id: this.className + '-jsfile',
-			onload: function(){
-				this.initSystemClass();
-		    }.bind(this)
-		});
-		
+		var source = this.jsPath + this.className + '.js';		
+		this.jsAsset(source,this.className,'initSystemClass');
 		return;
 	}.protect(),
 	
@@ -131,9 +111,6 @@ var mooShape = new Class({
 			title.rotate(this.options.title.rotate, this.ctx.title, this.titleSize, this.options.verbose);
 			title.alignment(this.options.title, this.titleProperty, this.options.verbose);
 			title.plot(this.options.title.text, this.ctx.title, this.titleSize);
-			
-			/*var length = this.mooTitle.getLength();
-			this.mooTitle.include(++length, title);*/
     	} catch (oErr) {
     		if(this.options.verbose) 
     			console.error('Error: Class ( ' + 
@@ -160,21 +137,8 @@ var mooShape = new Class({
     	 * As example: source = "./scripts/mooShapeCircle.js"
     	 */
     	var source = this.jsPath + this.className + '.js';
-    			
-    	// If the class already loaded try to init the class   
-		if($(this.className + '-jsfile')) {
-			this.initClass.delay(100, this);
-			return;
-		}
-		
-		// If the class wasn't loaded, we try to load by the Asset method
-		Asset.javascript(source, {
-			id: this.className + '-jsfile',
-			onload: function(){
-				this.initClass();
-		    }.bind(this)
-		});
-		
+    	
+    	this.jsAsset(source,this.className,'initClass');		
 		return;
 	}.protect(),
 	
@@ -182,9 +146,6 @@ var mooShape = new Class({
 		this.className = 'mooShape' + this.ucFirst(this.options.type);
 		try {
 			this.shape = new window[this.className]();
-			
-			/*var length = this.mooShape.getLength();
-			this.mooShape.include(++length, this.shape);*/
 			
 			//try to add extra methods as prepend and merge it to one array
 			this.shape.prependMethods.combine(this.options.actions);
@@ -256,25 +217,6 @@ var mooShape = new Class({
 		
 		return true;
 	}.protect(),
-	
-	execMethod: function(shape22, action) {
-		//alert(this.className +' , '+ methodName);
-		
-		//this.mooShape
-		//console.warn(shape, action );
-		var temp = new mooShapeTitle();
-		temp.testMethode.apply(this);
-		
-		/*try {
-			this.shape = new window[this.className]();
-			this.shape.draw.apply(this);
-			this.shape[methodName].apply(this);
-		} catch (oErr) {
-    		if(this.options.verbose) 
-    			console.error('Error: Method ( ' + 
-    					methodName + ' ) isn\'t implemented yet!'); 
-    	}*/
-	},
     
     createShapeElements: function() {
     	var divLength = this.mooDiv.getLength();
@@ -401,6 +343,41 @@ var mooShape = new Class({
     		this.assetTitleJsFiles();
     	}
     }.protect(),
+	
+	jsAsset: function(source,className,method) {
+		var onload =( function(){
+				this[method]();
+		    }.bind(this)
+		);
+		
+		if ( this.jsfiles[className] == 'loaded' ){
+			if (typeOf(onload) == 'function'){
+				onload();
+			}
+			return true;	
+		} else if ( this.jsfiles[className] == 'loading' ){
+			var tries = 0;
+			var jsfiles = this.jsfiles.get(source);
+			var checker = (function(){
+				tries++;
+				if (jsfiles == 'loading' && tries < '10') return;
+				clearInterval(checker);
+				if (typeOf(onload) == 'function'){
+					onload();
+				}
+			}).periodical(50);
+		} else {
+			this.jsfiles[className] = 'loading';
+			Asset.javascript(source, {
+				id: className + '-jsfile',
+				onload: function(){
+					this.jsfiles[className] = 'loaded';
+					this[method]();
+			    }.bind(this)
+	    	});
+		}		
+		return;
+	}.protect(),
     
     /**
      * Convert the first char to capital
@@ -454,4 +431,32 @@ var mooShape = new Class({
     	this.options.type = type;
     	return true;
     }
+});
+
+Chain.implement({
+    assetChain: function() {
+        while (this.$chain.length) {
+            this.callChain();
+        }
+    }
+});
+
+var mooShapeAsset = this.mooShapeAsset = new Class({
+
+	Implements: Chain,
+
+	initialize: function(){
+		this.chain.apply(this, arguments);
+	},
+
+	javascript: function(){
+		this.assetChain();
+		/*var source = this.options.url + this.options.name + '.js';
+		return Asset.javascript(source, {
+			id: this.options.name + '-jsfile'
+		});
+		this.fireEvent('javascript', this.subject);
+		pushInstance.call(this, fps);
+		return this;*/
+	}
 });
