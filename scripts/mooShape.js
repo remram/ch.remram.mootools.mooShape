@@ -21,12 +21,10 @@ var mooShape = new Class({
 	titleSize : false,
 	methods   : ['shadow', 'fill', 'stroke'],
 	
-	/*mooShape : new Hash,
-	mooTitle : new Hash,*/
 	mooDiv   : new Hash(),
 	jsfiles  : new Hash(),
 
-	Implements: [Options, Chain],
+	Implements: Options,
 	
 	options: {
 		verbose: false,
@@ -431,32 +429,4 @@ var mooShape = new Class({
     	this.options.type = type;
     	return true;
     }
-});
-
-Chain.implement({
-    assetChain: function() {
-        while (this.$chain.length) {
-            this.callChain();
-        }
-    }
-});
-
-var mooShapeAsset = this.mooShapeAsset = new Class({
-
-	Implements: Chain,
-
-	initialize: function(){
-		this.chain.apply(this, arguments);
-	},
-
-	javascript: function(){
-		this.assetChain();
-		/*var source = this.options.url + this.options.name + '.js';
-		return Asset.javascript(source, {
-			id: this.options.name + '-jsfile'
-		});
-		this.fireEvent('javascript', this.subject);
-		pushInstance.call(this, fps);
-		return this;*/
-	}
 });
