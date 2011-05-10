@@ -7,6 +7,8 @@ license: MIT-style
 authors:
 - Ramy Hasan (http://www.solexperts.com)
 
+provides: [demo]
+
 ...
 */
 
