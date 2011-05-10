@@ -1,27 +1,32 @@
-/**
- * mooShape 
- * Creates a simple shape based on canvas. 
- * Extended by excanvas which allows you to draw your shape under IE-Browser.
- * You can create different shape types and you are able to extend the class
- * by other shape types. Please feel free, to extend and improve this class! 
- * 
- * compatible with MooTools version 1.3 
- * 
- * @version		1.0
- *
- * @license		MIT-style license
- * @author		Ramy Hasan <ramy [dot] hasan [at] solexperts [dot] com>
- * @copyright	Solexperts AG
- */
+/*
+---
+description: mooShape, Creates a simple shape based on canvas.
+
+license: MIT-style
+
+authors:
+- Ramy Hasan (http://www.solexperts.com)
+
+requires:
+- core/1.3: '*'
+- more/1.3: 'Asset'
+- more/1.3: 'Hash'
+- excanvas/r73: '*'
+
+provides: [mooShape, title, star, rectangle, triangle, circle]
+
+...
+*/
 
 var mooShape = new Class({
 	version   : '1.0',
-	//jsPath    : './scripts/shapes/',
-	jsPath    : 'https://github.com/remram/ch.remram.mootools.mooShape/raw/master/scripts/shapes/',
 	className : 'mooShape',
 	type      : 'title',
 	titleSize : false,
 	methods   : ['shadow', 'fill', 'stroke'],
+	
+	//jsPath    : './scripts/shapes/',
+	jsPath    : 'https://github.com/remram/ch.remram.mootools.mooShape/raw/master/scripts/shapes/',
 	
 	mooDiv   : new Hash(),
 	jsfiles  : new Hash(),
