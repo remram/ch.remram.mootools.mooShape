@@ -368,7 +368,7 @@ var mooShape = new Class({
 				if (typeOf(onload) == 'function'){
 					onload();
 				}
-			}).periodical(500);
+			}).periodical(1000);
 		} else {
 			this.jsfiles[className] = 'loading';
 			Asset.javascript(source, {

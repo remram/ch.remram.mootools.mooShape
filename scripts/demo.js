@@ -51,7 +51,7 @@ window.addEvent('domready', function() {
 	var rec3 = new mooShape('mooShapeContainer', {
 		verbose: false,
 		type: 'rectangle',
-		actions: ['fill','shadow'],
+		actions: ['stroke'],
 		div: {
 			id: 'shape_3',
 			x : 200,
