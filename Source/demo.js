@@ -1,3 +1,15 @@
+/*
+---
+description: demo, just a demo.
+
+license: MIT-style
+
+authors:
+- Ramy Hasan (http://www.solexperts.com)
+
+...
+*/
+
 window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
 		verbose: false,
