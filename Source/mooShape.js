@@ -25,8 +25,8 @@ var mooShape = new Class({
 	titleSize : false,
 	methods   : ['shadow', 'fill', 'stroke'],
 	
-	//jsPath    : './Source/shapes/',
-	jsPath    : 'https://github.com/remram/ch.remram.mootools.mooShape/raw/master/Source/shapes/',
+	//jsPath    : './Source/Plugins/',
+	jsPath    : 'https://github.com/remram/ch.remram.mootools.mooShape/raw/master/Source/Plugins/',
 	
 	mooDiv   : new Hash(),
 	jsfiles  : new Hash(),
