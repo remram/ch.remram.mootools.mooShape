@@ -1,8 +1,7 @@
 /**
  * mooShape 
  * Creates a simple shape based on canvas. 
- * It's extended with excanvas which's allowd you to draw your shape 
- * under IE-Browser. 
+ * Extended by excanvas which allows you to draw your shape under IE-Browser.
  * You can create different shape types and you are able to extend the class
  * by other shape types. Please feel free, to extend and improve this class! 
  * 
