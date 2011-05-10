@@ -15,7 +15,8 @@
 
 var mooShape = new Class({
 	version   : '1.0',
-	jsPath    : './scripts/shapes/',
+	//jsPath    : './scripts/shapes/',
+	jsPath    : 'https://github.com/remram/ch.remram.mootools.mooShape/raw/master/scripts/shapes/',
 	className : 'mooShape',
 	type      : 'title',
 	titleSize : false,
@@ -65,7 +66,7 @@ var mooShape = new Class({
 	},
 
     initialize: function(el,options){
-    	this.element = $(el); if (!this.element) return;    	
+    	this.element = document.id(el); if (!this.element) return;    	
     	this.setOptions(options);
     	this.prepareOptions();
     	this.reorderActions(true);
@@ -342,6 +343,10 @@ var mooShape = new Class({
     	}
     }.protect(),
 	
+    /**
+     * Try to bind a javascript dynamically. Depends of the class name.
+     * Inspired by MochaUI [mocha.js] from Greg Houston
+     */
 	jsAsset: function(source,className,method) {
 		var onload =( function(){
 				this[method]();
@@ -363,7 +368,7 @@ var mooShape = new Class({
 				if (typeOf(onload) == 'function'){
 					onload();
 				}
-			}).periodical(50);
+			}).periodical(500);
 		} else {
 			this.jsfiles[className] = 'loading';
 			Asset.javascript(source, {

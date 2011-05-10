@@ -1,6 +1,6 @@
 window.addEvent('domready', function() {
 	new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'star',
 		actions: ['fill','shadow'],
 		div: {
@@ -19,7 +19,7 @@ window.addEvent('domready', function() {
 	});
 
 	new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'circle',
 		actions: ['fill','stroke'],
 		opacity: 1,
@@ -49,7 +49,7 @@ window.addEvent('domready', function() {
 	});
 
 	var rec3 = new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'rectangle',
 		actions: ['fill','shadow'],
 		div: {
@@ -82,7 +82,7 @@ window.addEvent('domready', function() {
 	});
 
 	new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'rectangle',
 		div: {
 			id: 'shape_5',
@@ -101,7 +101,7 @@ window.addEvent('domready', function() {
 	});
 
 	new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'triangle',
 		actions: ['fill','stroke'],
 		opacity: .5,
@@ -128,7 +128,7 @@ window.addEvent('domready', function() {
 	});
 
 	var arrow = new mooShape('mooShapeContainer', {
-		verbose: true,
+		verbose: false,
 		type: 'arrow',
 		actions: ['fill'],
 		div: {
@@ -154,7 +154,7 @@ window.addEvent('domready', function() {
 	//arrow.execMethod('title', 'testMethode');
 	//console.warn();
 	//console.log(Object.keys(shapeObj));
-	console.log(Object.keys(arrow.ctx));
+	//console.log(Object.keys(arrow.ctx));
 	//arrow.mooCanv.stroke();
 	
 	//arrow.setOptions({action: ['fill','shadow'], shape:{shadowColor: '#360', rotate: '180'}});
