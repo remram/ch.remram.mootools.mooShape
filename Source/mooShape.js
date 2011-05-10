@@ -13,7 +13,7 @@ requires:
 - more/1.3: 'Hash'
 - excanvas/r73: '*'
 
-provides: [mooShape, title, star, rectangle, triangle, circle]
+provides: [mooShape, title, star, rectangle, triangle, circle, arrow]
 
 ...
 */

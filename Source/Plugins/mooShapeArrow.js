@@ -1,5 +1,18 @@
-/**
-* extend the mooShape class
+/*
+---
+description: mooShapeArrow, creates an arrow shape.
+
+license: MIT-style
+
+authors:
+- Ramy Hasan (http://www.solexperts.com)
+
+requires:
+- mooShape/1.0: '*'
+
+provides: [mooShapeArrow]
+
+...
 */
 
 var mooShapeArrow = new Class({

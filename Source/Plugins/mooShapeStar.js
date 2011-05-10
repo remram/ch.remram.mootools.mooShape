@@ -1,5 +1,18 @@
-/**
-* extend the mooShape class
+/*
+---
+description: mooShapeStar, creates an star shape.
+
+license: MIT-style
+
+authors:
+- Ramy Hasan (http://www.solexperts.com)
+
+requires:
+- mooShape/1.0: '*'
+
+provides: [mooShapeStar]
+
+...
 */
 
 var mooShapeStar = new Class({

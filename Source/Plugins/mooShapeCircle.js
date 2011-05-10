@@ -1,3 +1,20 @@
+/*
+---
+description: mooShapeCircle, creates an circle shape.
+
+license: MIT-style
+
+authors:
+- Ramy Hasan (http://www.solexperts.com)
+
+requires:
+- mooShape/1.0: '*'
+
+provides: [mooShapeCircle]
+
+...
+*/
+
 var mooShapeCircle = new Class({
 	Extends			: mooShape,
 	prependMethods	: [],

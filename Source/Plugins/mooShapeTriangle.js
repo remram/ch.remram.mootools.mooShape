@@ -1,5 +1,18 @@
-/**
-* extend the mooShape class
+/*
+---
+description: mooShapeTriangle, creates an triangle shape.
+
+license: MIT-style
+
+authors:
+- Ramy Hasan (http://www.solexperts.com)
+
+requires:
+- mooShape/1.0: '*'
+
+provides: [mooShapeTriangle]
+
+...
 */
 
 var mooShapeTriangle = new Class({

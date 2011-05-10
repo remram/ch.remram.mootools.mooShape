@@ -1,3 +1,20 @@
+/*
+---
+description: mooShapeRectangle, creates an rectangle shape.
+
+license: MIT-style
+
+authors:
+- Ramy Hasan (http://www.solexperts.com)
+
+requires:
+- mooShape/1.0: '*'
+
+provides: [mooShapeRectangle]
+
+...
+*/
+
 var mooShapeRectangle = new Class({
 	Extends			: mooShape,
 	prependMethods	: [],

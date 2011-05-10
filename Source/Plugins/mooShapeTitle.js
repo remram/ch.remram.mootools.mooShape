@@ -1,3 +1,20 @@
+/*
+---
+description: mooShapeTitle, creates an title shape.
+
+license: MIT-style
+
+authors:
+- Ramy Hasan (http://www.solexperts.com)
+
+requires:
+- mooShape/1.0: '*'
+
+provides: [mooShapeTitle]
+
+...
+*/
+
 var mooShapeTitle = new Class({
 	Extends: mooShape,
     
