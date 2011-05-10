@@ -1,11 +1,13 @@
 /**
- * mooShape compatible with MooTools version 1.3
- *
+ * mooShape 
+ * Creates a simple shape based on canvas. 
+ * It's extended with excanvas which's allowd you to draw your shape 
+ * under IE-Browser. 
  * You can create different shape types and you are able to extend the class
- * by other shape types
+ * by other shape types. Please feel free, to extend and improve this class! 
  * 
- * Please feel free, to extend and improve this class! 
- *
+ * compatible with MooTools version 1.3 
+ * 
  * @version		1.0
  *
  * @license		MIT-style license
@@ -405,33 +407,7 @@ var mooShape = new Class({
     	return color;
     }.protect(),
     
-    getObj: function() {
-    	return this.mooShape;
-    },
-    
     getVersion: function() {
     	return this.version;
-    },
-    
-    getJsPath: function() {
-    	return this.jsPath;
-    },
-    
-    getClassName: function() {
-    	return this.className;
-    },
-    
-    getOptions: function() {
-    	return this.options;
-    },
-    
-    setType: function(type) {
-    	this.type = type;
-    	return true;
-    },
-    
-    setClassType: function(type) {
-    	this.options.type = type;
-    	return true;
     }
 });
